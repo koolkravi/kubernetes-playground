@@ -16,6 +16,7 @@ su - vagrant -c "kubectl apply -f https://docs.projectcalico.org/v3.11/manifests
 
 #Step 9 cluster join command
 echo "[Master Step 4] cluster join command"
+mkdir -p /vagrant/token
 kubeadm token create --print-join-command > /vagrant/token/joincluster.sh
 
 
