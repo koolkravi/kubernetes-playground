@@ -58,6 +58,28 @@ getent group docker
 sudo usermod -aG docker <your-user>
 ```
 
+<<<<<<< HEAD
+###Example: 
+
+###Before
+```
+vagrant@ubuntuvm01:~$ getent group docker
+docker:x:998:
+
+vagrant@ubuntuvm01:~$ echo $USER
+vagrant
+```
+
+###After
+```
+vagrant@ubuntuvm01:~$ sudo usermod -aG docker vagrant
+vagrant@ubuntuvm01:~$ getent group docker
+docker:x:998:vagrant
+```
+
+
+=======
+>>>>>>> f81e8b6... added .md file
 ### ps : create the docker group and add your user
 
 - Create the docker group
