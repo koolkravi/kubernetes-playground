@@ -98,7 +98,7 @@ Vagrant.configure("2") do |config|
   end
   nodes=1
 
-  (1..1).each do |k|
+  (1..2).each do |k|
     config.vm.define "k-worker0#{k}" do |worker|
         worker.vm.box=box_name
         worker.vm.network "private_network", ip: "10.0.0.#{k+5}"
@@ -112,21 +112,4 @@ Vagrant.configure("2") do |config|
         worker.vm.provision "shell", path: "bootstrap_k-worker01.sh"
      end
   end
-
-  (2..2).each do |k|
-    config.vm.define "k-worker0#{k}" do |worker|
-        worker.vm.box=box_name
-        worker.vm.network "private_network", ip: "10.0.0.#{k+5}"
-        worker.vm.hostname="k-worker0#{k}"
-        worker.vm.provider :virtualbox do |vb|
-	  vb.name="k-worker0#{k}"
-	  vb.customize ["modifyvm", :id,"--memory","1024"]
-	  vb.customize ["modifyvm", :id,"--cpus","1"]
-        end
-        #worker.vm.provision:shell,inline:"echo hello#{k}"
-        #worker.vm.provision "shell", path: "bootstrap_k-worker01.sh"
-     end
-  end
-
-
 end
