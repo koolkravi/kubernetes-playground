@@ -2,11 +2,9 @@
 
 **Learn kubernetes**
 
-# Helpful commands
-
 # Reference:
 
-## 1. Helpful commands
+## Helpful commands
 
 **Get version**
 ```
