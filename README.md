@@ -14,6 +14,7 @@ kubectl version --short
 
 **Get nodes status**
 ```
+kubectl cluster-info
 kubectl get nodes
 kubectl get nodes -o wide
 ```
