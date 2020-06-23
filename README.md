@@ -23,3 +23,10 @@ kubectl get nodes -o wide
 kubectl get cs
 ```
 
+**Copy kube config from master to host to use kubectl command**
+```
+mkdir $HOME/.kube
+scp vagrant@10.0.0.5:/home/vagrant/.kube/config $HOME/.kube/config
+
+note: 10.0.0.5 is IP of master node
+```
