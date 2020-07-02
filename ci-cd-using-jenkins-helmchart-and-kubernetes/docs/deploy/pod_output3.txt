@@ -1,0 +1,192 @@
+vagrant@k-master:~$ kubectl describe pods jenkins-86f5bdf78-f5rsg -n jenkins
+Name:         jenkins-86f5bdf78-f5rsg
+Namespace:    jenkins
+Priority:     0
+Node:         k-worker01/10.0.0.6
+Start Time:   Wed, 24 Jun 2020 23:29:53 +0000
+Labels:       app.kubernetes.io/component=jenkins-master
+              app.kubernetes.io/instance=jenkins
+              app.kubernetes.io/managed-by=Tiller
+              app.kubernetes.io/name=jenkins
+              helm.sh/chart=jenkins-2.1.0
+              pod-template-hash=86f5bdf78
+Annotations:  checksum/config: 42985d81b5c9e42aba8dd79a9377d7a6563869e7a713eeb5eb0dd1b7c1ee3fc5
+              cni.projectcalico.org/podIP: 192.168.114.9/32
+              cni.projectcalico.org/podIPs: 192.168.114.9/32
+Status:       Running
+IP:           192.168.114.9
+IPs:
+  IP:           192.168.114.9
+Controlled By:  ReplicaSet/jenkins-86f5bdf78
+Init Containers:
+  copy-default-config:
+    Container ID:  docker://7fef770af372056d8bb25c1ebd6a8368e95fb2fecb3519949c69b1b371270856
+    Image:         jenkins/jenkins:lts
+    Image ID:      docker-pullable://jenkins/jenkins@sha256:0e8912b04f962b258ff9f51fb85fd1a9c5458e9d6e2f84aee747d765de0b7b70
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      sh
+      /var/jenkins_config/apply_config.sh
+    State:          Terminated
+      Reason:       Completed
+      Exit Code:    0
+      Started:      Thu, 25 Jun 2020 14:00:48 +0000
+      Finished:     Thu, 25 Jun 2020 14:05:08 +0000
+    Ready:          True
+    Restart Count:  1
+    Limits:
+      cpu:     500m
+      memory:  1Gi
+    Requests:
+      cpu:     50m
+      memory:  256Mi
+    Environment:
+      ADMIN_PASSWORD:  <set to the key 'jenkins-admin-password' in secret 'jenkins'>  Optional: false
+      ADMIN_USER:      <set to the key 'jenkins-admin-user' in secret 'jenkins'>      Optional: false
+    Mounts:
+      /tmp from tmp (rw)
+      /var/jenkins_config from jenkins-config (rw)
+      /var/jenkins_home from jenkins-home (rw)
+      /var/jenkins_plugins from plugin-dir (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from jenkins-token-c5qnd (ro)
+Containers:
+  jenkins:
+    Container ID:  docker://5595f09aa1c47a72e3d14be031c235b7c2ca08c816172c0146693ec14e576ce6
+    Image:         jenkins/jenkins:lts
+    Image ID:      docker-pullable://jenkins/jenkins@sha256:0e8912b04f962b258ff9f51fb85fd1a9c5458e9d6e2f84aee747d765de0b7b70
+    Ports:         8080/TCP, 50000/TCP
+    Host Ports:    0/TCP, 0/TCP
+    Args:
+      --argumentsRealm.passwd.$(ADMIN_USER)=$(ADMIN_PASSWORD)
+      --argumentsRealm.roles.$(ADMIN_USER)=admin
+      --httpPort=8080
+    State:          Running
+      Started:      Thu, 25 Jun 2020 14:07:51 +0000
+    Last State:     Terminated
+      Reason:       Error
+      Exit Code:    143
+      Started:      Thu, 25 Jun 2020 14:05:16 +0000
+      Finished:     Thu, 25 Jun 2020 14:07:43 +0000
+    Ready:          True
+    Restart Count:  2
+    Limits:
+      cpu:     500m
+      memory:  1Gi
+    Requests:
+      cpu:      50m
+      memory:   256Mi
+    Liveness:   http-get http://:http/login delay=90s timeout=5s period=10s #success=1 #failure=5
+    Readiness:  http-get http://:http/login delay=60s timeout=5s period=10s #success=1 #failure=3
+    Environment:
+      POD_NAME:                  jenkins-86f5bdf78-f5rsg (v1:metadata.name)
+      JAVA_OPTS:
+                                 -Dcasc.reload.token=$(POD_NAME)
+
+      JENKINS_OPTS:
+      JENKINS_SLAVE_AGENT_PORT:  50000
+      ADMIN_PASSWORD:            <set to the key 'jenkins-admin-password' in secret 'jenkins'>  Optional: false
+      ADMIN_USER:                <set to the key 'jenkins-admin-user' in secret 'jenkins'>      Optional: false
+      CASC_JENKINS_CONFIG:       /var/jenkins_home/casc_configs
+    Mounts:
+      /tmp from tmp (rw)
+      /usr/share/jenkins/ref/plugins/ from plugin-dir (rw)
+      /var/jenkins_config from jenkins-config (ro)
+      /var/jenkins_home from jenkins-home (rw)
+      /var/jenkins_home/casc_configs from sc-config-volume (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from jenkins-token-c5qnd (ro)
+  jenkins-sc-config:
+    Container ID:   docker://f3a5c729c0fddb4cdf9d28372ba21712c800aaacb0a2c1e437ac8c3a837b7526
+    Image:          kiwigrid/k8s-sidecar:0.1.144
+    Image ID:       docker-pullable://kiwigrid/k8s-sidecar@sha256:590f088f15cc0c010d1730d68780bba3cee692b9c07d9322aa758f733ba08977
+    Port:           <none>
+    Host Port:      <none>
+    State:          Running
+      Started:      Thu, 25 Jun 2020 14:05:18 +0000
+    Last State:     Terminated
+      Reason:       Completed
+      Exit Code:    0
+      Started:      Wed, 24 Jun 2020 23:30:34 +0000
+      Finished:     Wed, 24 Jun 2020 23:36:14 +0000
+    Ready:          True
+    Restart Count:  1
+    Environment:
+      POD_NAME:    jenkins-86f5bdf78-f5rsg (v1:metadata.name)
+      LABEL:       jenkins-jenkins-config
+      FOLDER:      /var/jenkins_home/casc_configs
+      NAMESPACE:   jenkins
+      REQ_URL:     http://localhost:8080/reload-configuration-as-code/?casc-reload-token=$(POD_NAME)
+      REQ_METHOD:  POST
+    Mounts:
+      /var/jenkins_home from jenkins-home (rw)
+      /var/jenkins_home/casc_configs from sc-config-volume (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from jenkins-token-c5qnd (ro)
+Conditions:
+  Type              Status
+  Initialized       True
+  Ready             True
+  ContainersReady   True
+  PodScheduled      True
+Volumes:
+  plugins:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:
+    SizeLimit:  <unset>
+  tmp:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:
+    SizeLimit:  <unset>
+  jenkins-config:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      jenkins
+    Optional:  false
+  plugin-dir:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:
+    SizeLimit:  <unset>
+  jenkins-home:
+    Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
+    ClaimName:  pvc-jenkins-pv1
+    ReadOnly:   false
+  sc-config-volume:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:
+    SizeLimit:  <unset>
+  jenkins-token-c5qnd:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  jenkins-token-c5qnd
+    Optional:    false
+QoS Class:       Burstable
+Node-Selectors:  <none>
+Tolerations:     node.kubernetes.io/not-ready:NoExecute for 300s
+                 node.kubernetes.io/unreachable:NoExecute for 300s
+Events:
+  Type     Reason          Age                From                 Message
+  ----     ------          ----               ----                 -------
+  Normal   Scheduled       <unknown>          default-scheduler    Successfully assigned jenkins/jenkins-86f5bdf78-f5rsg to k-worker01
+  Normal   Pulling         15h                kubelet, k-worker01  Pulling image "jenkins/jenkins:lts"
+  Normal   Pulled          15h                kubelet, k-worker01  Successfully pulled image "jenkins/jenkins:lts"
+  Normal   Created         15h                kubelet, k-worker01  Created container copy-default-config
+  Normal   Started         15h                kubelet, k-worker01  Started container copy-default-config
+  Normal   Pulling         15h                kubelet, k-worker01  Pulling image "jenkins/jenkins:lts"
+  Normal   Created         15h                kubelet, k-worker01  Created container jenkins
+  Normal   Pulled          15h                kubelet, k-worker01  Successfully pulled image "jenkins/jenkins:lts"
+  Normal   Started         15h                kubelet, k-worker01  Started container jenkins
+  Normal   Pulled          15h                kubelet, k-worker01  Container image "kiwigrid/k8s-sidecar:0.1.144" already present on machine
+  Normal   Created         15h                kubelet, k-worker01  Created container jenkins-sc-config
+  Normal   Started         15h                kubelet, k-worker01  Started container jenkins-sc-config
+  Normal   SandboxChanged  43m (x3 over 43m)  kubelet, k-worker01  Pod sandbox changed, it will be killed and re-created.
+  Normal   Pulling         43m                kubelet, k-worker01  Pulling image "jenkins/jenkins:lts"
+  Normal   Pulled          43m                kubelet, k-worker01  Successfully pulled image "jenkins/jenkins:lts"
+  Normal   Created         43m                kubelet, k-worker01  Created container copy-default-config
+  Normal   Started         42m                kubelet, k-worker01  Started container copy-default-config
+  Normal   Pulling         38m                kubelet, k-worker01  Pulling image "jenkins/jenkins:lts"
+  Normal   Pulled          38m                kubelet, k-worker01  Successfully pulled image "jenkins/jenkins:lts"
+  Normal   Created         38m                kubelet, k-worker01  Created container jenkins
+  Normal   Pulled          38m                kubelet, k-worker01  Container image "kiwigrid/k8s-sidecar:0.1.144" already present on machine
+  Normal   Started         38m                kubelet, k-worker01  Started container jenkins
+  Normal   Created         38m                kubelet, k-worker01  Created container jenkins-sc-config
+  Normal   Started         38m                kubelet, k-worker01  Started container jenkins-sc-config
+  Warning  Unhealthy       36m (x4 over 36m)  kubelet, k-worker01  Liveness probe failed: HTTP probe failed with statuscode: 503
+  Warning  Unhealthy       36m (x8 over 37m)  kubelet, k-worker01  Readiness probe failed: HTTP probe failed with statuscode: 503
+  Warning  Unhealthy       33m (x3 over 34m)  kubelet, k-worker01  Readiness probe failed: Get http://192.168.114.9:8080/login: net/http: request canceled (Client.Timeout exceeded while awaiting headers)

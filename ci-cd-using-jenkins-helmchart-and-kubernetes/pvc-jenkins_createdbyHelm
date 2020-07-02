@@ -1,0 +1,51 @@
+vagrant@k-master:~$ kubectl get pvc jenkins -n jenkins -o yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  creationTimestamp: "2020-06-24T17:20:23Z"
+  finalizers:
+  - kubernetes.io/pvc-protection
+  labels:
+    app.kubernetes.io/component: jenkins-master
+    app.kubernetes.io/instance: jenkins
+    app.kubernetes.io/managed-by: Tiller
+    app.kubernetes.io/name: jenkins
+    helm.sh/chart: jenkins-2.1.0
+  managedFields:
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:labels:
+          .: {}
+          f:app.kubernetes.io/component: {}
+          f:app.kubernetes.io/instance: {}
+          f:app.kubernetes.io/managed-by: {}
+          f:app.kubernetes.io/name: {}
+          f:helm.sh/chart: {}
+      f:spec:
+        f:accessModes: {}
+        f:resources:
+          f:requests:
+            .: {}
+            f:storage: {}
+        f:volumeMode: {}
+      f:status:
+        f:phase: {}
+    manager: Go-http-client
+    operation: Update
+    time: "2020-06-24T17:20:23Z"
+  name: jenkins
+  namespace: jenkins
+  resourceVersion: "18365"
+  selfLink: /api/v1/namespaces/jenkins/persistentvolumeclaims/jenkins
+  uid: 876a3f10-310d-4965-b41b-7038f6c53e94
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  volumeMode: Filesystem
+status:
+  phase: Pending

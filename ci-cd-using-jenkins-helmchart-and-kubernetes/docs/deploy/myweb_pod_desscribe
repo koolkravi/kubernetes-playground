@@ -1,0 +1,52 @@
+vagrant@k-master:~$ kubectl describe pods
+Name:         myweb-b5d897f9f-w6mnh
+Namespace:    default
+Priority:     0
+Node:         k-worker02/10.0.0.7
+Start Time:   Thu, 02 Jul 2020 15:24:09 +0000
+Labels:       app=myweb
+              pod-template-hash=b5d897f9f
+Annotations:  cni.projectcalico.org/podIP: 192.168.57.148/32
+              cni.projectcalico.org/podIPs: 192.168.57.148/32
+Status:       Running
+IP:           192.168.57.148
+IPs:
+  IP:           192.168.57.148
+Controlled By:  ReplicaSet/myweb-b5d897f9f
+Containers:
+  myweb:
+    Container ID:   docker://bb0f494b32dcf3c8811da806a7e0a54922d6c38052ff23d0e7815364f7621bfd
+    Image:          10.0.0.5:5000/koolkravi/myweb:1
+    Image ID:       docker-pullable://10.0.0.5:5000/koolkravi/myweb@sha256:73a90355a52c98a593e520b069d9d176f29950644ccfb8c1de7e7bf6504ab07b
+    Port:           <none>
+    Host Port:      <none>
+    State:          Running
+      Started:      Thu, 02 Jul 2020 15:29:51 +0000
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-xxcr5 (ro)
+Conditions:
+  Type              Status
+  Initialized       True
+  Ready             True
+  ContainersReady   True
+  PodScheduled      True
+Volumes:
+  default-token-xxcr5:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  default-token-xxcr5
+    Optional:    false
+QoS Class:       BestEffort
+Node-Selectors:  <none>
+Tolerations:     node.kubernetes.io/not-ready:NoExecute for 300s
+                 node.kubernetes.io/unreachable:NoExecute for 300s
+Events:
+  Type    Reason     Age        From                 Message
+  ----    ------     ----       ----                 -------
+  Normal  Scheduled  <unknown>  default-scheduler    Successfully assigned default/myweb-b5d897f9f-w6mnh to k-worker02
+  Normal  Pulling    6m26s      kubelet, k-worker02  Pulling image "10.0.0.5:5000/koolkravi/myweb:1"
+  Normal  Pulled     3m32s      kubelet, k-worker02  Successfully pulled image "10.0.0.5:5000/koolkravi/myweb:1"
+  Normal  Created    3m19s      kubelet, k-worker02  Created container myweb
+  Normal  Started    2m29s      kubelet, k-worker02  Started container myweb

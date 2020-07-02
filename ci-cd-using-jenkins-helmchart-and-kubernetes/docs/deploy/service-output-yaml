@@ -1,0 +1,64 @@
+vagrant@k-master:~$ kubectl get service  jenkins -n jenkins -o yaml
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: "2020-06-24T23:29:53Z"
+  labels:
+    app.kubernetes.io/component: jenkins-master
+    app.kubernetes.io/instance: jenkins
+    app.kubernetes.io/managed-by: Tiller
+    app.kubernetes.io/name: jenkins
+    helm.sh/chart: jenkins-2.1.0
+  managedFields:
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:labels:
+          .: {}
+          f:app.kubernetes.io/component: {}
+          f:app.kubernetes.io/instance: {}
+          f:app.kubernetes.io/managed-by: {}
+          f:app.kubernetes.io/name: {}
+          f:helm.sh/chart: {}
+      f:spec:
+        f:externalTrafficPolicy: {}
+        f:ports:
+          .: {}
+          k:{"port":8080,"protocol":"TCP"}:
+            .: {}
+            f:name: {}
+            f:nodePort: {}
+            f:port: {}
+            f:protocol: {}
+            f:targetPort: {}
+        f:selector:
+          .: {}
+          f:app.kubernetes.io/component: {}
+          f:app.kubernetes.io/instance: {}
+        f:sessionAffinity: {}
+        f:type: {}
+    manager: Go-http-client
+    operation: Update
+    time: "2020-06-24T23:29:53Z"
+  name: jenkins
+  namespace: jenkins
+  resourceVersion: "44893"
+  selfLink: /api/v1/namespaces/jenkins/services/jenkins
+  uid: 5f9b0bbb-dd9b-48aa-a0b6-8a8bf5fec1a8
+spec:
+  clusterIP: 10.99.108.125
+  externalTrafficPolicy: Cluster
+  ports:
+  - name: http
+    nodePort: 32323
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app.kubernetes.io/component: jenkins-master
+    app.kubernetes.io/instance: jenkins
+  sessionAffinity: None
+  type: NodePort
+status:
+  loadBalancer: {}

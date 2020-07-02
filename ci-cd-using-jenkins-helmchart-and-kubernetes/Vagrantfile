@@ -1,0 +1,44 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+Vagrant.configure("2") do |config|
+  box_name="hashicorp/bionic64"
+  config.vm.box = box_name
+ 
+  ENV['VAGRANT_NO_PARALLEL']='yes'
+  config.vm.provision "shell",path:"bootstrap.sh"
+ 
+  config.vm.define "k-master" do |master|
+    master.vm.box=box_name
+    master.vm.network "private_network", ip:"10.0.0.5"
+    master.vm.network "forwarded_port",guest: 32323,host: "32323"
+    master.vm.hostname="k-master"
+    master.vm.provider "virtualbox" do |vb|
+      vb.name="k-master"
+      vb.customize ["modifyvm", :id,"--memory","2048"]
+      vb.customize ["modifyvm", :id,"--cpus","2"]
+    end
+    #master.vm.provision:shell,inline: <<-SHELL
+    #  echo hello from master
+    #sed -i 's/^#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
+    #SHELL
+    master.vm.provision "shell",path: "bootstrap_k-master.sh"
+
+  end
+  nodes=1
+
+  (1..2).each do |k|
+    config.vm.define "k-worker0#{k}" do |worker|
+        worker.vm.box=box_name
+        worker.vm.network "private_network", ip: "10.0.0.#{k+5}"        
+        worker.vm.network "forwarded_port",guest: 32223,host: "3222#{k+3}"
+        worker.vm.hostname="k-worker0#{k}"
+        worker.vm.provider :virtualbox do |vb|
+	  vb.name="k-worker0#{k}"
+	  vb.customize ["modifyvm", :id,"--memory","1024"]
+	  vb.customize ["modifyvm", :id,"--cpus","1"]
+        end
+        #worker.vm.provision:shell,inline:"echo hello#{k}"
+        worker.vm.provision "shell", path: "bootstrap_k-worker01.sh"
+     end
+  end
+end

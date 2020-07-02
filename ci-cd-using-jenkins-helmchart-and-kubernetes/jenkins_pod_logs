@@ -1,0 +1,42 @@
+vagrant@k-master:~$ kubectl logs jenkins-86f5bdf78-f5rsg -c jenkins -n jenkins
+Running from: /usr/share/jenkins/jenkins.war
+webroot: EnvVars.masterEnvVars.get("JENKINS_HOME")
+2020-06-25 14:08:09.223+0000 [id=1]     INFO    org.eclipse.jetty.util.log.Log#initialized: Logging initialized @3862ms to org.eclipse.jetty.util.log.JavaUtilLog
+2020-06-25 14:08:10.487+0000 [id=1]     INFO    winstone.Logger#logInternal: Beginning extraction from war file
+2020-06-25 14:08:11.117+0000 [id=1]     WARNING o.e.j.s.handler.ContextHandler#setContextPath: Empty contextPath
+2020-06-25 14:08:11.541+0000 [id=1]     INFO    org.eclipse.jetty.server.Server#doStart: jetty-9.4.27.v20200227; built: 2020-02-27T18:37:21.340Z; git: a304fd9f351f337e7c0e2a7c28878dd536149c6c; jvm 1.8.0_242-b08
+2020-06-25 14:08:14.938+0000 [id=1]     INFO    o.e.j.w.StandardDescriptorProcessor#visitServlet: NO JSP Support for /, did not find org.eclipse.jetty.jsp.JettyJspServlet
+2020-06-25 14:08:15.436+0000 [id=1]     INFO    o.e.j.s.s.DefaultSessionIdManager#doStart: DefaultSessionIdManager workerName=node0
+2020-06-25 14:08:15.437+0000 [id=1]     INFO    o.e.j.s.s.DefaultSessionIdManager#doStart: No SessionScavenger set, using defaults
+2020-06-25 14:08:15.466+0000 [id=1]     INFO    o.e.j.server.session.HouseKeeper#startScavenging: node0 Scavenging every 600000ms
+2020-06-25 14:08:19.077+0000 [id=1]     INFO    hudson.WebAppMain#contextInitialized: Jenkins home directory: /var/jenkins_home found at: EnvVars.masterEnvVars.get("JENKINS_HOME")
+2020-06-25 14:08:21.374+0000 [id=1]     INFO    o.e.j.s.handler.ContextHandler#doStart: Started w.@4ee203eb{Jenkins v2.235.1,/,file:///var/jenkins_home/war/,AVAILABLE}{/var/jenkins_home/war}
+2020-06-25 14:08:21.705+0000 [id=1]     INFO    o.e.j.server.AbstractConnector#doStart: Started ServerConnector@4157f54e{HTTP/1.1, (http/1.1)}{0.0.0.0:8080}
+2020-06-25 14:08:21.711+0000 [id=1]     INFO    org.eclipse.jetty.server.Server#doStart: Started @16351ms
+2020-06-25 14:08:21.718+0000 [id=20]    INFO    winstone.Logger#logInternal: Winstone Servlet Engine running: controlPort=disabled
+2020-06-25 14:08:28.069+0000 [id=25]    INFO    jenkins.InitReactorRunner$1#onAttained: Started initialization
+2020-06-25 14:08:30.530+0000 [id=26]    INFO    jenkins.InitReactorRunner$1#onAttained: Listed all plugins
+2020-06-25 14:09:02.745+0000 [id=25]    INFO    jenkins.InitReactorRunner$1#onAttained: Prepared all plugins
+2020-06-25 14:09:03.053+0000 [id=26]    INFO    jenkins.InitReactorRunner$1#onAttained: Started all plugins
+2020-06-25 14:09:18.740+0000 [id=25]    INFO    jenkins.InitReactorRunner$1#onAttained: Augmented all extensions
+2020-06-25 14:09:19.731+0000 [id=25]    INFO    jenkins.InitReactorRunner$1#onAttained: System config loaded
+2020-06-25 14:09:24.840+0000 [id=25]    WARNING i.j.p.casc.BaseConfigurator#createAttribute: Can't handle class org.csanchez.jenkins.plugins.kubernetes.PodTemplate#listener: type is abstract but not Describable.
+2020-06-25 14:09:34.709+0000 [id=25]    WARNING i.j.p.casc.BaseConfigurator#createAttribute: Can't handle class org.csanchez.jenkins.plugins.kubernetes.PodTemplate#listener: type is abstract but not Describable.
+2020-06-25 14:09:39.001+0000 [id=25]    INFO    o.s.c.s.AbstractApplicationContext#prepareRefresh: Refreshing org.springframework.web.context.support.StaticWebApplicationContext@5d7b2c37: display name [Root WebApplicationContext]; startup date [Thu Jun 25 14:09:39 UTC 2020]; root of context hierarchy
+2020-06-25 14:09:39.002+0000 [id=25]    INFO    o.s.c.s.AbstractApplicationContext#obtainFreshBeanFactory: Bean factory for application context [org.springframework.web.context.support.StaticWebApplicationContext@5d7b2c37]: org.springframework.beans.factory.support.DefaultListableBeanFactory@6f54a081
+2020-06-25 14:09:39.088+0000 [id=25]    INFO    o.s.b.f.s.DefaultListableBeanFactory#preInstantiateSingletons: Pre-instantiating singletons in org.springframework.beans.factory.support.DefaultListableBeanFactory@6f54a081: defining beans [filter,legacy]; root of factory hierarchy
+2020-06-25 14:09:39.741+0000 [id=25]    INFO    o.c.j.p.k.KubernetesClientProvider$SaveableListenerImpl#onChange: Invalidating Kubernetes client: kubernetes null
+2020-06-25 14:09:40.751+0000 [id=26]    INFO    jenkins.InitReactorRunner$1#onAttained: System config adapted
+2020-06-25 14:09:40.752+0000 [id=26]    INFO    jenkins.InitReactorRunner$1#onAttained: Loaded all jobs
+2020-06-25 14:09:40.774+0000 [id=25]    INFO    jenkins.InitReactorRunner$1#onAttained: Configuration for all jobs updated
+2020-06-25 14:09:41.147+0000 [id=39]    INFO    hudson.model.AsyncPeriodicWork#lambda$doRun$0: Started Download metadata
+2020-06-25 14:09:41.561+0000 [id=39]    INFO    hudson.model.AsyncPeriodicWork#lambda$doRun$0: Finished Download metadata. 401 ms
+2020-06-25 14:09:42.727+0000 [id=26]    INFO    o.s.c.s.AbstractApplicationContext#prepareRefresh: Refreshing org.springframework.web.context.support.StaticWebApplicationContext@62180d96: display name [Root WebApplicationContext]; startup date [Thu Jun 25 14:09:42 UTC 2020]; root of context hierarchy
+2020-06-25 14:09:42.729+0000 [id=26]    INFO    o.s.c.s.AbstractApplicationContext#obtainFreshBeanFactory: Bean factory for application context [org.springframework.web.context.support.StaticWebApplicationContext@62180d96]: org.springframework.beans.factory.support.DefaultListableBeanFactory@76988ad4
+2020-06-25 14:09:42.736+0000 [id=26]    INFO    o.s.b.f.s.DefaultListableBeanFactory#preInstantiateSingletons: Pre-instantiating singletons in org.springframework.beans.factory.support.DefaultListableBeanFactory@76988ad4: defining beans [filter,legacy]; root of factory hierarchy
+2020-06-25 14:09:42.801+0000 [id=26]    INFO    o.c.j.p.k.KubernetesClientProvider$SaveableListenerImpl#onChange: Invalidating Kubernetes client: kubernetes null
+2020-06-25 14:09:42.815+0000 [id=25]    INFO    jenkins.InitReactorRunner$1#onAttained: Completed initialization
+2020-06-25 14:09:42.838+0000 [id=19]    INFO    o.c.j.p.k.KubernetesClientProvider$SaveableListenerImpl#onChange: Invalidating Kubernetes client: kubernetes null
+2020-06-25 14:09:43.067+0000 [id=19]    INFO    hudson.WebAppMain$3#run: Jenkins is fully up and running
+2020-06-25 14:15:37.485+0000 [id=57]    INFO    hudson.model.AsyncPeriodicWork#lambda$doRun$0: Started Periodic background build discarder
+2020-06-25 14:15:37.490+0000 [id=57]    INFO    hudson.model.AsyncPeriodicWork#lambda$doRun$0: Finished Periodic background build discarder. 3 ms
