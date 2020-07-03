@@ -40,7 +40,7 @@ kubectl get pvc -n prometheus -o wide
 kubectl get ns
 ```
 
-# Install Premetheus
+# Premetheus
 
 ## 5. create prometheus.values
 ```
