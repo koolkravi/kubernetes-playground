@@ -68,7 +68,7 @@ mountPath: /vagrant/prometheus/data2
 existingClaim: "pvc-prometheus-pv2"
 and 
 
-## 5. Install prometheus
+## 6. Install prometheus
 ```
 helm install stable/prometheus --name prometheus --values /vagrant/prometheus/prometheus.values --namespace prometheus
 ```
@@ -83,7 +83,7 @@ kubectl describe pod/prometheus-server-78db46bc7b-dz6h5 -n prometheus
 kubectl logs prometheus-server-78db46bc7b-dz6h5 -c prometheus-server -n prometheus
 ```
 
-## 6. open prometheus URL
+## 7. open prometheus URL
 
 ```
 http://10.0.0.5:32322/
@@ -91,14 +91,14 @@ http://10.0.0.5:32322/
 
 # Grafana
 
-## 7. create PV and PVC
+## 8. create PV and PVC
 ```
 kubectl create ns grafana
 kubectl create -f /vagrant/grafana/pv-grafana-pv1.yaml --namespace grafana
 kubectl create -f /vagrant/grafana/pvc-grafana-pv1.yaml --namespace grafana
 ```
 
-## 8. create grafana.values
+## 9. create grafana.values
 
 ```
 mkdir -p /vagrant/grafana
@@ -120,7 +120,7 @@ existingClaim: pvc-grafana-pv1
 adminPassword: admin
 
 
-## 9.  Install Grafana
+## 10.  Install Grafana
 
 ```
 helm install stable/grafana --name grafana --values /vagrant/grafana/grafana.values --namespace grafana
@@ -132,7 +132,7 @@ helm list
 helm delete grafana --purge
 ```
 
-## 10. access grafana
+## 11. access grafana
 ```
 http://10.0.0.5:32323/
 ```
@@ -151,7 +151,6 @@ New dashboard
 data source = prometheus
 
 search grafana dashboard
-ref : https://grafana.com/grafana/dashboards
 select : Kubernetes Deployment Statefulset Daemonset metrics
 get id : 10300
 
@@ -169,7 +168,6 @@ kubectl delte nc grafana
 kubectl delete ns prpmetheus
 ```
 
-
-Ref : vagrant 
-https://stackoverflow.com/questions/7565446/change-vagrant-port-forwarding-on-a-running-system
-https://github.com/grafana/grafana/issues/11391
+# Reference : 
+- (vagrant) [https://stackoverflow.com/questions/7565446/change-vagrant-port-forwarding-on-a-running-system]
+- (Grafana dashboard)[https://grafana.com/grafana/dashboards]
