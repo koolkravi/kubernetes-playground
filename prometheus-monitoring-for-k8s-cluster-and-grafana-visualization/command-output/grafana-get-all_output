@@ -1,0 +1,12 @@
+vagrant@k-master:~$ kubectl get all -n grafana
+NAME                           READY   STATUS    RESTARTS   AGE
+pod/grafana-76df98cc88-vfj9l   1/1     Running   0          21s
+
+NAME              TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+service/grafana   NodePort   10.108.106.60   <none>        80:32323/TCP   21s
+
+NAME                      READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/grafana   1/1     1            1           21s
+
+NAME                                 DESIRED   CURRENT   READY   AGE
+replicaset.apps/grafana-76df98cc88   1         1         1       21s

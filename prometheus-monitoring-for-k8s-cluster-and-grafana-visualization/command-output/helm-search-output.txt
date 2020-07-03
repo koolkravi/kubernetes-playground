@@ -1,0 +1,32 @@
+vagrant@k-master:~$ helm search prometheus
+NAME                                    CHART VERSION   APP VERSION     DESCRIPTION
+stable/prometheus                       11.6.0          2.19.0          Prometheus is a monitoring system and time series database.
+stable/prometheus-adapter               2.4.0           v0.6.0          A Helm chart for k8s prometheus adapter
+stable/prometheus-blackbox-exporter     4.1.1           0.16.0          Prometheus Blackbox Exporter
+stable/prometheus-cloudwatch-exporter   0.8.1           0.8.0           A Helm chart for prometheus cloudwatch-exporter
+stable/prometheus-consul-exporter       0.1.4           0.4.0           A Helm chart for the Prometheus Consul Exporter
+stable/prometheus-couchdb-exporter      0.1.1           1.0             A Helm chart to export the metrics from couchdb in Promet...
+stable/prometheus-mongodb-exporter      2.5.0           v0.10.0         A Prometheus exporter for MongoDB metrics
+stable/prometheus-mysql-exporter        0.5.3           v0.11.0         A Helm chart for prometheus mysql exporter with cloudsqlp...
+stable/prometheus-nats-exporter         2.5.0           0.6.2           A Helm chart for prometheus-nats-exporter
+stable/prometheus-node-exporter         1.11.0          1.0.0           A Helm chart for prometheus node-exporter
+stable/prometheus-operator              8.15.6          0.38.1          Provides easy monitoring definitions for Kubernetes servi...
+stable/prometheus-postgres-exporter     1.3.0           0.8.0           A Helm chart for prometheus postgres-exporter
+stable/prometheus-pushgateway           1.4.0           1.2.0           A Helm chart for prometheus pushgateway
+stable/prometheus-rabbitmq-exporter     0.5.5           v0.29.0         Rabbitmq metrics exporter for prometheus
+stable/prometheus-redis-exporter        3.4.1           1.3.4           Prometheus exporter for Redis metrics
+stable/prometheus-snmp-exporter         0.0.5           0.14.0          Prometheus SNMP Exporter
+stable/prometheus-to-sd                 0.3.0           0.5.2           Scrape metrics stored in prometheus format and push them ...
+stable/elasticsearch-exporter           3.3.0           1.1.0           Elasticsearch stats exporter for Prometheus
+stable/helm-exporter                    0.3.3           0.4.0           DEPRECATED Exports helm release stats to prometheus
+stable/karma                            1.5.1           v0.60           A Helm chart for Karma - an UI for Prometheus Alertmanager
+stable/stackdriver-exporter             1.2.3           0.6.0           Stackdriver exporter for Prometheus
+stable/weave-cloud                      0.3.7           1.4.0           Weave Cloud is a add-on to Kubernetes which provides Cont...
+stable/kube-state-metrics               2.8.11          1.9.7           Install kube-state-metrics to generate and expose cluster...
+stable/kuberhealthy                     1.2.6           v1.0.2          The official Helm chart for Kuberhealthy.
+stable/mariadb                          7.3.14          10.3.22         DEPRECATED Fast, reliable, scalable, and easy to use open...
+
+
+vagrant@k-master:~$ helm search grafana
+NAME            CHART VERSION   APP VERSION     DESCRIPTION
+stable/grafana  5.3.0           7.0.3           The leading tool for querying and visualizing time series...

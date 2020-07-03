@@ -1,0 +1,63 @@
+vagrant@k-master:~$ kubectl get all -o wide -n prometheus
+NAME                                                READY   STATUS    RESTARTS   AGE   IP               NODE         NOMINATED NODE   READINESS GATES
+pod/prometheus-alertmanager-7f9c9f9457-t8hfs        2/2     Running   0          70s   192.168.114.43   k-worker01   <none>           <none>
+pod/prometheus-kube-state-metrics-c65b87574-2tppt   1/1     Running   0          70s   192.168.57.155   k-worker02   <none>           <none>
+pod/prometheus-node-exporter-q25bb                  1/1     Running   0          70s   10.0.0.7         k-worker02   <none>           <none>
+pod/prometheus-node-exporter-qmgkm                  1/1     Running   0          70s   10.0.0.6         k-worker01   <none>           <none>
+pod/prometheus-pushgateway-5d74bbc8fc-ghlbd         1/1     Running   0          70s   192.168.57.154   k-worker02   <none>           <none>
+pod/prometheus-server-78db46bc7b-jtb8q              2/2     Running   0          70s   192.168.57.156   k-worker02   <none>           <none>
+
+NAME                                    TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE   SELECTOR
+service/prometheus-alertmanager         ClusterIP   10.109.254.132   <none>        80/TCP         70s   app=prometheus,component=alertmanager,release=prometheus
+service/prometheus-kube-state-metrics   ClusterIP   10.96.2.1        <none>        8080/TCP       70s   app.kubernetes.io/instance=prometheus,app.kubernetes.io/name=kube-state-metrics
+service/prometheus-node-exporter        ClusterIP   None             <none>        9100/TCP       70s   app=prometheus,component=node-exporter,release=prometheus
+service/prometheus-pushgateway          ClusterIP   10.105.44.246    <none>        9091/TCP       70s   app=prometheus,component=pushgateway,release=prometheus
+service/prometheus-server               NodePort    10.107.195.170   <none>        80:32322/TCP   70s   app=prometheus,component=server,release=prometheus
+
+NAME                                      DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE   CONTAINERS                 IMAGES                      SELECTOR
+daemonset.apps/prometheus-node-exporter   2         2         2       2            2           <none>          70s   prometheus-node-exporter   prom/node-exporter:v1.0.1   app=prometheus,component=node-exporter,release=prometheus
+
+NAME                                            READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS                                                         IMAGES                                                         SELECTOR
+deployment.apps/prometheus-alertmanager         1/1     1            1           70s   prometheus-alertmanager,prometheus-alertmanager-configmap-reload   prom/alertmanager:v0.20.0,jimmidyson/configmap-reload:v0.3.0   app=prometheus,component=alertmanager,release=prometheus
+deployment.apps/prometheus-kube-state-metrics   1/1     1            1           70s   kube-state-metrics                                                 quay.io/coreos/kube-state-metrics:v1.9.7                       app.kubernetes.io/name=kube-state-metrics
+deployment.apps/prometheus-pushgateway          1/1     1            1           70s   prometheus-pushgateway                                             prom/pushgateway:v1.2.0                                        app=prometheus,component=pushgateway,release=prometheus
+deployment.apps/prometheus-server               1/1     1            1           70s   prometheus-server-configmap-reload,prometheus-server               jimmidyson/configmap-reload:v0.3.0,prom/prometheus:v2.19.0     app=prometheus,component=server,release=prometheus
+
+NAME                                                      DESIRED   CURRENT   READY   AGE   CONTAINERS                                                         IMAGES                                                         SELECTOR
+replicaset.apps/prometheus-alertmanager-7f9c9f9457        1         1         1       70s   prometheus-alertmanager,prometheus-alertmanager-configmap-reload   prom/alertmanager:v0.20.0,jimmidyson/configmap-reload:v0.3.0   app=prometheus,component=alertmanager,pod-template-hash=7f9c9f9457,release=prometheus
+replicaset.apps/prometheus-kube-state-metrics-c65b87574   1         1         1       70s   kube-state-metrics                                                 quay.io/coreos/kube-state-metrics:v1.9.7                       app.kubernetes.io/name=kube-state-metrics,pod-template-hash=c65b87574
+replicaset.apps/prometheus-pushgateway-5d74bbc8fc         1         1         1       70s   prometheus-pushgateway                                             prom/pushgateway:v1.2.0                                        app=prometheus,component=pushgateway,pod-template-hash=5d74bbc8fc,release=prometheus
+replicaset.apps/prometheus-server-78db46bc7b              1         1         1       70s   prometheus-server-configmap-reload,prometheus-server               jimmidyson/configmap-reload:v0.3.0,prom/prometheus:v2.19.0     app=prometheus,component=server,pod-template-hash=78db46bc7b,release=prometheus
+
+
+
+vagrant@k-master:~$ kubectl get all -n prometheus
+NAME                                                READY   STATUS    RESTARTS   AGE
+pod/prometheus-alertmanager-7f9c9f9457-t8hfs        2/2     Running   0          88s
+pod/prometheus-kube-state-metrics-c65b87574-2tppt   1/1     Running   0          88s
+pod/prometheus-node-exporter-q25bb                  1/1     Running   0          88s
+pod/prometheus-node-exporter-qmgkm                  1/1     Running   0          88s
+pod/prometheus-pushgateway-5d74bbc8fc-ghlbd         1/1     Running   0          88s
+pod/prometheus-server-78db46bc7b-jtb8q              2/2     Running   0          88s
+
+NAME                                    TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
+service/prometheus-alertmanager         ClusterIP   10.109.254.132   <none>        80/TCP         88s
+service/prometheus-kube-state-metrics   ClusterIP   10.96.2.1        <none>        8080/TCP       88s
+service/prometheus-node-exporter        ClusterIP   None             <none>        9100/TCP       88s
+service/prometheus-pushgateway          ClusterIP   10.105.44.246    <none>        9091/TCP       88s
+service/prometheus-server               NodePort    10.107.195.170   <none>        80:32322/TCP   88s
+
+NAME                                      DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
+daemonset.apps/prometheus-node-exporter   2         2         2       2            2           <none>          88s
+
+NAME                                            READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/prometheus-alertmanager         1/1     1            1           88s
+deployment.apps/prometheus-kube-state-metrics   1/1     1            1           88s
+deployment.apps/prometheus-pushgateway          1/1     1            1           88s
+deployment.apps/prometheus-server               1/1     1            1           88s
+
+NAME                                                      DESIRED   CURRENT   READY   AGE
+replicaset.apps/prometheus-alertmanager-7f9c9f9457        1         1         1       88s
+replicaset.apps/prometheus-kube-state-metrics-c65b87574   1         1         1       88s
+replicaset.apps/prometheus-pushgateway-5d74bbc8fc         1         1         1       88s
+replicaset.apps/prometheus-server-78db46bc7b              1         1         1       88s
