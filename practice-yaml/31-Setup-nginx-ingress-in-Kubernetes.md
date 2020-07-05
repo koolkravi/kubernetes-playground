@@ -21,6 +21,7 @@ NAME         STATUS   ROLES    AGE    VERSION   INTERNAL-IP   EXTERNAL-IP   OS-I
 k-master     Ready    master   112m   v1.18.2   10.0.0.5      <none>        Ubuntu 18.04.3 LTS   4.15.0-58-generic   docker://19.3.8
 k-worker01   Ready    <none>   100m   v1.18.2   10.0.0.6      <none>        Ubuntu 18.04.3 LTS   4.15.0-58-generic   docker://19.3.8
 k-worker02   Ready    <none>   86m    v1.18.2   10.0.2.15     <none>        Ubuntu 18.04.3 LTS   4.15.0-58-generic   docker://19.3.8
+```
 
 ## Concept - Ingtess controller
 It will create below Resource
@@ -44,7 +45,8 @@ sudo apt-get -y install haproxy
 ```
 
 ```
-vagrant@k-master:~$ haproxy -v
+haproxy -v
+
 HA-Proxy version 1.8.8-1ubuntu0.10 2020/04/03
 Copyright 2000-2018 Willy Tarreau <willy@haproxy.org>
 ```
@@ -73,9 +75,11 @@ backend http_back
 
 ## Step 3: 
 ```
-vagrant@k-master:~$ systemctl status haproxy
+systemctl status haproxy
 systemctl enable haproxy
 systemctl start haproxy
+
+netstat -nltp
 ```
 
 ## Step 4: Create ingress controller 
