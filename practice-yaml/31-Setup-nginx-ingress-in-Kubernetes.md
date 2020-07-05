@@ -333,9 +333,10 @@ replicaset.apps/nginx-deploy-green-6b85fd4b89   1         1         1       4m31
 replicaset.apps/nginx-deploy-main-545f4f6967    1         1         1       42m
 ```
 
-## Step 10: Create ingress resource
+## Step 11: Create ingress resource
 
 ingress-resource-2.yaml
+
 ```
 ```
 
