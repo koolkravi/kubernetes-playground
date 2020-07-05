@@ -55,7 +55,7 @@ Copyright 2000-2018 Willy Tarreau <willy@haproxy.org>
 ## Step2: Edit HAProxy configuration file
 
 ```
- vi /etc/haproxy/haproxy.cfg
+sudo vi /etc/haproxy/haproxy.cfg
 ```
 Add below at end of haproxy.cfg
 ```
@@ -244,6 +244,13 @@ haproxy_server_ip nginx.example.com
 ```
 
 ## Step 8: test
+
+make entry as below host file of you local system
+```
+10.0.0.5 nginx.example.com
+```
+
+run from browser
 ```
 nginx.example.com
 ```
@@ -334,13 +341,26 @@ replicaset.apps/nginx-deploy-main-545f4f6967    1         1         1       42m
 ```
 
 ## Step 11: Create ingress resource
-
 ingress-resource-2.yaml
 
 ```
+kubectl apply -f ingress-resource-2.yaml
 ```
 
+## test
+Make below entries in local host file
+```
+10.0.0.5 nginx.example.com
+10.0.0.5 blue.nginx.example.com
+10.0.0.5 green.nginx.example.com
+```
 
+Run from browser
+```
+nginx.example.com
+blue.nginx.example.com
+green.nginx.example.com
+```
 
 
 ## Ref

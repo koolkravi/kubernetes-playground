@@ -1,0 +1,22 @@
+vagrant@k-master:/vagrant/ingress-demo$ kubectl get ing
+NAME                 CLASS    HOSTS                                                              ADDRESS   PORTS   AGE
+ingress-resource-2   <none>   nginx.example.com,blue.nginx.example.com,green.nginx.example.com             80      3m27s
+vagrant@k-master:/vagrant/ingress-demo$ kubectl describe ing ingress-resource-2
+Name:             ingress-resource-2
+Namespace:        default
+Address:
+Default backend:  default-http-backend:80 (<error: endpoints "default-http-backend" not found>)
+Rules:
+  Host                     Path  Backends
+  ----                     ----  --------
+  nginx.example.com
+                              nginx-deploy-main:80 (192.168.114.7:80)
+  blue.nginx.example.com
+                              nginx-deploy-blue:80 (192.168.114.8:80)
+  green.nginx.example.com
+                              nginx-deploy-green:80 (192.168.57.135:80)
+Annotations:               Events:
+  Type                     Reason          Age    From                      Message
+  ----                     ------          ----   ----                      -------
+  Normal                   AddedOrUpdated  3m37s  nginx-ingress-controller  Configuration for default/ingress-resource-2 was added or updated
+  Normal                   AddedOrUpdated  3m37s  nginx-ingress-controller  Configuration for default/ingress-resource-2 was added or updated
