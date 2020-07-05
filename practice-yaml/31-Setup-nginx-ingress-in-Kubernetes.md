@@ -347,7 +347,7 @@ ingress-resource-2.yaml
 kubectl apply -f ingress-resource-2.yaml
 ```
 
-## test
+## Step 12: test
 Make below entries in local host file
 ```
 10.0.0.5 nginx.example.com
@@ -362,6 +362,25 @@ blue.nginx.example.com
 green.nginx.example.com
 ```
 
+# Clean Up
+```
+# Clean Up
+kubectl delete ing ingress-resource-2
+kubectl delete service nginx-deploy-green
+kubectl delete service nginx-deploy-blue
+kubectl delete service nginx-deploy-main
+kubectl delete deploy nginx-deploy-green
+kubectl delete deploy nginx-deploy-blue
+kubectl delete deploy nginx-deploy-main
+
+kubectl delete DaemonSet nginx-ingress -n nginx-ingress
+kubectl delete ConfigMap nginx-config -n nginx-ingress
+kubectl delete Secret default-server-secret -n nginx-ingress
+kubectl delete ClusterRoleBinding nginx-ingress
+kubectl delete ClusterRole nginx-ingress
+kubectl delete serviceaccount nginx-ingress
+kubectl delete namespace nginx-ingress
+```
 
 ## Ref
 - https://devops.ionos.com/tutorials/install-and-configure-haproxy-load-balancer-on-ubuntu-1604/
