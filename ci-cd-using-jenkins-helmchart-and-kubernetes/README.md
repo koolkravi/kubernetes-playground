@@ -29,9 +29,9 @@ scp vagrant@10.0.0.5:/home/vagrant/.kube/config $HOME/.kube/config
 ## 2. Install Helm, tiller and Setup private docker registry
 
 ### Run below script from k-master
-[Script on master](/1-prerequisite-install-helm_k-master.sh)
+[Run 1-prerequisite-install-helm_k-master.sh Script on master](https://github.com/koolkravi/kubernetes-playground/blob/master/ci-cd-using-jenkins-helmchart-and-kubernetes/docs/1-prerequisite-install-helm_k-master.sh)
 
-[Refer install helm document for detail](/docs/install-helm.md)
+[Refer install helm document for detail](https://github.com/koolkravi/kubernetes-playground/blob/master/ci-cd-using-jenkins-helmchart-and-kubernetes/docs/install-helm.md)
 
 ### some commands
 ```
