@@ -40,7 +40,7 @@ Traefic
 ## Step 1: Install HAProxy Load Balancer
 
 ```
-sudo apt-get updatesudo 
+sudo apt-get update
 sudo apt-get -y install haproxy
 ```
 
