@@ -31,7 +31,7 @@ scp vagrant@10.0.0.5:/home/vagrant/.kube/config $HOME/.kube/config
 ### Run below script from k-master
 [Run 1-prerequisite-install-helm_k-master.sh Script on master](https://github.com/koolkravi/kubernetes-playground/blob/master/ci-cd-using-jenkins-helmchart-and-kubernetes/docs/1-prerequisite-install-helm_k-master.sh)
 
-[Refer install helm document for detail](https://github.com/koolkravi/kubernetes-playground/blob/master/ci-cd-using-jenkins-helmchart-and-kubernetes/docs/install-helm.md)
+[Refer install-helm.md for detail](https://github.com/koolkravi/kubernetes-playground/blob/master/ci-cd-using-jenkins-helmchart-and-kubernetes/docs/install-helm.md)
 
 ### some commands
 ```
