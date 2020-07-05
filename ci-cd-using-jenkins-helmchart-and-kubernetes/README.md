@@ -45,7 +45,7 @@ curl http://localhost:5000/v2
 ## 3. Change permission of docker.sock and run docker command without sudo
 
 ### Run below script on all nodes (k-master and k-workers)
-[scrip share.sh](/docs/2-share.sh)
+[scrip 2-share.sh](https://github.com/koolkravi/kubernetes-playground/blob/master/ci-cd-using-jenkins-helmchart-and-kubernetes/docs/2-share.sh)
 
 ## 4. Create PV, PVC and Deploy jenkins using helm in k8s cluster
 
