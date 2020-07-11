@@ -23,7 +23,7 @@ k-worker01   Ready    <none>   100m   v1.18.2   10.0.0.6      <none>        Ubun
 k-worker02   Ready    <none>   86m    v1.18.2   10.0.2.15     <none>        Ubuntu 18.04.3 LTS   4.15.0-58-generic   docker://19.3.8
 ```
 
-## Concept - Ingtess controller
+## Concept - Ingress controller
 It will create below Resource
 namespace
 service account
@@ -82,7 +82,12 @@ systemctl start haproxy
 netstat -nltp
 ```
 
-## Step 4: Create ingress controller 
+## Step 4: Create ingress controller  
+
+Execute automated script for Step 4.1 to 4.5
+```
+./install-nginx-Ingress-controller.sh
+```
 
 https://github.com/nginxinc/kubernetes-ingress
 
@@ -92,11 +97,10 @@ cd kubernetes-ingress/deployments/
 ```
 
 Installation instruction- Installation with Manifests
-```
 https://github.com/nginxinc/kubernetes-ingress/blob/master/deployments/README.md
 click here link
 https://docs.nginx.com/nginx-ingress-controller/installation/
-```
+
 ### 4.1 Configure RBAC - Create a namespace and a service account for the Ingress controller:
 ```
 kubectl apply -f common/ns-and-sa.yaml
