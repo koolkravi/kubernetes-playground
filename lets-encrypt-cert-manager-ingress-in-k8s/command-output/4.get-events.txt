@@ -1,0 +1,79 @@
+vagrant@k-master:~$ kubectl get events
+LAST SEEN   TYPE      REASON                    OBJECT                              MESSAGE
+29m         Warning   AddedOrUpdatedWithError   ingress/cm-acme-http-solver-2td57   Configuration for default/cm-acme-http-solver-2td57 was added or updated, but not applied: Error reloading NGINX for default/cm-acme-http-solver-2td57: nginx reload failed: Command /usr/sbin/nginx -s reload stdout: ""
+stderr: "nginx: [emerg] cannot load certificate \"/etc/nginx/secrets/default-letsencrypt-staging\": PEM_read_bio_X509_AUX() failed (SSL: error:0909006C:PEM routines:get_name:no start line:Expecting: TRUSTED CERTIFICATE)\n"
+finished with error: exit status 1
+29m         Warning   AddedOrUpdatedWithError   ingress/cm-acme-http-solver-2td57   Configuration for default/cm-acme-http-solver-2td57 was added or updated, but not applied: Error reloading NGINX for default/cm-acme-http-solver-2td57: nginx reload failed: Command /usr/sbin/nginx -s reload stdout: ""
+stderr: "nginx: [emerg] cannot load certificate \"/etc/nginx/secrets/default-letsencrypt-staging\": PEM_read_bio_X509_AUX() failed (SSL: error:0909006C:PEM routines:get_name:no start line:Expecting: TRUSTED CERTIFICATE)\n"
+finished with error: exit status 1
+29m         Normal    Scheduled                 pod/cm-acme-http-solver-6x7mx       Successfully assigned default/cm-acme-http-solver-6x7mx to k-worker02
+29m         Normal    Pulling                   pod/cm-acme-http-solver-6x7mx       Pulling image "quay.io/jetstack/cert-manager-acmesolver:v0.15.2"
+29m         Normal    Pulled                    pod/cm-acme-http-solver-6x7mx       Successfully pulled image "quay.io/jetstack/cert-manager-acmesolver:v0.15.2"
+29m         Normal    Created                   pod/cm-acme-http-solver-6x7mx       Created container acmesolver
+29m         Normal    Started                   pod/cm-acme-http-solver-6x7mx       Started container acmesolver
+29m         Warning   AddedOrUpdatedWithError   ingress/cm-acme-http-solver-bmvbr   Configuration for default/cm-acme-http-solver-bmvbr was added or updated, but not applied: Error reloading NGINX for default/cm-acme-http-solver-bmvbr: nginx reload failed: Command /usr/sbin/nginx -s reload stdout: ""
+stderr: "nginx: [emerg] cannot load certificate \"/etc/nginx/secrets/default-letsencrypt-staging\": PEM_read_bio_X509_AUX() failed (SSL: error:0909006C:PEM routines:get_name:no start line:Expecting: TRUSTED CERTIFICATE)\n"
+finished with error: exit status 1
+29m         Warning   AddedOrUpdatedWithError   ingress/cm-acme-http-solver-bmvbr   Configuration for default/cm-acme-http-solver-bmvbr was added or updated, but not applied: Error reloading NGINX for default/cm-acme-http-solver-bmvbr: nginx reload failed: Command /usr/sbin/nginx -s reload stdout: ""
+stderr: "nginx: [emerg] cannot load certificate \"/etc/nginx/secrets/default-letsencrypt-staging\": PEM_read_bio_X509_AUX() failed (SSL: error:0909006C:PEM routines:get_name:no start line:Expecting: TRUSTED CERTIFICATE)\n"
+finished with error: exit status 1
+29m         Warning   AddedOrUpdatedWithError   ingress/cm-acme-http-solver-sxpbl   Configuration for default/cm-acme-http-solver-sxpbl was added or updated, but not applied: Error reloading NGINX for default/cm-acme-http-solver-sxpbl: nginx reload failed: Command /usr/sbin/nginx -s reload stdout: ""
+stderr: "nginx: [emerg] cannot load certificate \"/etc/nginx/secrets/default-letsencrypt-staging\": PEM_read_bio_X509_AUX() failed (SSL: error:0909006C:PEM routines:get_name:no start line:Expecting: TRUSTED CERTIFICATE)\n"
+finished with error: exit status 1
+29m         Warning   AddedOrUpdatedWithError   ingress/cm-acme-http-solver-sxpbl   Configuration for default/cm-acme-http-solver-sxpbl was added or updated, but not applied: Error reloading NGINX for default/cm-acme-http-solver-sxpbl: nginx reload failed: Command /usr/sbin/nginx -s reload stdout: ""
+stderr: "nginx: [emerg] cannot load certificate \"/etc/nginx/secrets/default-letsencrypt-staging\": PEM_read_bio_X509_AUX() failed (SSL: error:0909006C:PEM routines:get_name:no start line:Expecting: TRUSTED CERTIFICATE)\n"
+finished with error: exit status 1
+29m         Normal    CreateCertificate         ingress/ingress-resource            Successfully created Certificate "letsencrypt-staging"
+29m         Normal    AddedOrUpdated            ingress/ingress-resource            Configuration for default/ingress-resource was added or updated
+29m         Normal    AddedOrUpdated            ingress/ingress-resource            Configuration for default/ingress-resource was added or updated
+29m         Warning   UpdatedWithError          ingress/ingress-resource            Configuration was updated due to updated secret default/letsencrypt-staging, but not applied: Error when reloading NGINX when updating Secret: nginx reload failed: Command /usr/sbin/nginx -s reload stdout: ""
+stderr: "nginx: [emerg] cannot load certificate \"/etc/nginx/secrets/default-letsencrypt-staging\": PEM_read_bio_X509_AUX() failed (SSL: error:0909006C:PEM routines:get_name:no start line:Expecting: TRUSTED CERTIFICATE)\n"
+finished with error: exit status 1
+29m         Warning   UpdatedWithError          ingress/ingress-resource            Configuration was updated due to updated secret default/letsencrypt-staging, but not applied: Error when reloading NGINX when updating Secret: nginx reload failed: Command /usr/sbin/nginx -s reload stdout: ""
+stderr: "nginx: [emerg] cannot load certificate \"/etc/nginx/secrets/default-letsencrypt-staging\": PEM_read_bio_X509_AUX() failed (SSL: error:0909006C:PEM routines:get_name:no start line:Expecting: TRUSTED CERTIFICATE)\n"
+finished with error: exit status 1
+29m         Normal    Started                   challenge/letsencrypt-staging-3900472416-3342406101-555233647   Challenge scheduled for processing
+29m         Normal    Presented                 challenge/letsencrypt-staging-3900472416-3342406101-555233647   Presented challenge using http-01 challenge mechanism
+29m         Normal    Created                   order/letsencrypt-staging-3900472416-3342406101                 Created Challenge resource "letsencrypt-staging-3900472416-3342406101-555233647" for domain "green.nginx.example.com"
+29m         Normal    OrderCreated              certificaterequest/letsencrypt-staging-3900472416               Created Order resource default/letsencrypt-staging-3900472416-3342406101
+29m         Normal    GeneratedKey              certificate/letsencrypt-staging                                 Generated a new private key
+29m         Warning   UpdatedWithError          secret/letsencrypt-staging                                      default/letsencrypt-staging was updated, but not applied: Error when reloading NGINX when updating Secret: nginx reload failed: Command /usr/sbin/nginx -s reload stdout: ""
+stderr: "nginx: [emerg] cannot load certificate \"/etc/nginx/secrets/default-letsencrypt-staging\": PEM_read_bio_X509_AUX() failed (SSL: error:0909006C:PEM routines:get_name:no start line:Expecting: TRUSTED CERTIFICATE)\n"
+finished with error: exit status 1
+29m         Warning   UpdatedWithError          secret/letsencrypt-staging                                      default/letsencrypt-staging was updated, but not applied: Error when reloading NGINX when updating Secret: nginx reload failed: Command /usr/sbin/nginx -s reload stdout: ""
+stderr: "nginx: [emerg] cannot load certificate \"/etc/nginx/secrets/default-letsencrypt-staging\": PEM_read_bio_X509_AUX() failed (SSL: error:0909006C:PEM routines:get_name:no start line:Expecting: TRUSTED CERTIFICATE)\n"
+finished with error: exit status 1
+29m         Normal    Requested                 certificate/letsencrypt-staging                                 Created new CertificateRequest resource "letsencrypt-staging-3900472416"
+
+
+vagrant@k-master:~$ kubectl get events -n cert-manager
+LAST SEEN   TYPE     REASON              OBJECT                                          MESSAGE
+49m         Normal   Scheduled           pod/cert-manager-58c8d4ff5b-6fqx8               Successfully assigned cert-manager/cert-manager-58c8d4ff5b-6fqx8 to k-worker01
+49m         Normal   Pulled              pod/cert-manager-58c8d4ff5b-6fqx8               Container image "quay.io/jetstack/cert-manager-controller:v0.15.2" already present on machine
+49m         Normal   Created             pod/cert-manager-58c8d4ff5b-6fqx8               Created container cert-manager
+49m         Normal   Started             pod/cert-manager-58c8d4ff5b-6fqx8               Started container cert-manager
+49m         Normal   SuccessfulCreate    replicaset/cert-manager-58c8d4ff5b              Created pod: cert-manager-58c8d4ff5b-6fqx8
+49m         Normal   Scheduled           pod/cert-manager-cainjector-74659dbddf-6xppw    Successfully assigned cert-manager/cert-manager-cainjector-74659dbddf-6xppw to k-worker02
+49m         Normal   Pulled              pod/cert-manager-cainjector-74659dbddf-6xppw    Container image "quay.io/jetstack/cert-manager-cainjector:v0.15.2" already present on machine
+49m         Normal   Created             pod/cert-manager-cainjector-74659dbddf-6xppw    Created container cert-manager
+49m         Normal   Started             pod/cert-manager-cainjector-74659dbddf-6xppw    Started container cert-manager
+49m         Normal   SuccessfulCreate    replicaset/cert-manager-cainjector-74659dbddf   Created pod: cert-manager-cainjector-74659dbddf-6xppw
+49m         Normal   ScalingReplicaSet   deployment/cert-manager-cainjector              Scaled up replica set cert-manager-cainjector-74659dbddf to 1
+49m         Normal   Scheduled           pod/cert-manager-webhook-56648bc48-fbckd        Successfully assigned cert-manager/cert-manager-webhook-56648bc48-fbckd to k-worker02
+49m         Normal   Pulled              pod/cert-manager-webhook-56648bc48-fbckd        Container image "quay.io/jetstack/cert-manager-webhook:v0.15.2" already present on machine
+49m         Normal   Created             pod/cert-manager-webhook-56648bc48-fbckd        Created container cert-manager
+49m         Normal   Started             pod/cert-manager-webhook-56648bc48-fbckd        Started container cert-manager
+49m         Normal   SuccessfulCreate    replicaset/cert-manager-webhook-56648bc48       Created pod: cert-manager-webhook-56648bc48-fbckd
+49m         Normal   ScalingReplicaSet   deployment/cert-manager-webhook                 Scaled up replica set cert-manager-webhook-56648bc48 to 1
+49m         Normal   ScalingReplicaSet   deployment/cert-manager                         Scaled up replica set cert-manager-58c8d4ff5b to 1
+
+
+vagrant@k-master:~$ kubectl get events -n kube-system
+LAST SEEN   TYPE     REASON           OBJECT                                                   MESSAGE
+50m         Normal   LeaderElection   configmap/cert-manager-cainjector-leader-election-core   cert-manager-cainjector-74659dbddf-6xppw_ca882bf0-9612-4022-a4ba-f099a2ce8005 became leader
+50m         Normal   LeaderElection   configmap/cert-manager-cainjector-leader-election        cert-manager-cainjector-74659dbddf-6xppw_36029e25-2256-4be3-9a99-e00465c4b18e became leader
+49m         Normal   LeaderElection   configmap/cert-manager-controller                        cert-manager-58c8d4ff5b-6fqx8-external-cert-manager-controller became leader
+
+
+
+

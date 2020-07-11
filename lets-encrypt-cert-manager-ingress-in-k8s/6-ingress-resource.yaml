@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-resource
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-staging"
+
+spec:
+  tls:
+  - hosts:
+    - green.nginx.example.com
+    secretName: letsencrypt-staging
+  rules:
+  - host: green.nginx.example.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: nginx-deploy-green
+          servicePort: 80

@@ -1,0 +1,327 @@
+# before
+
+vagrant@k-master:~$ kubectl get secrets
+NAME                  TYPE                                  DATA   AGE
+default-token-pz567   kubernetes.io/service-account-token   3      5d23h
+
+vagrant@k-master:~$ kubectl get cert
+No resources found in default namespace.
+
+
+# After
+
+vagrant@k-master:~$ kubectl create -f /vagrant/ingress-resource.yaml
+ingress.extensions/ingress-resource created
+
+vagrant@k-master:~$ kubectl get ing
+NAME                        CLASS    HOSTS                     ADDRESS   PORTS     AGE
+cm-acme-http-solver-2td57   <none>   green.nginx.example.com             80        72s
+ingress-resource            <none>   green.nginx.example.com             80, 443   76s
+
+
+vagrant@k-master:~$ kubectl describe ing ingress-resource
+Name:             ingress-resource
+Namespace:        default
+Address:
+Default backend:  default-http-backend:80 (<error: endpoints "default-http-backend" not found>)
+TLS:
+  letsencrypt-staging terminates green.nginx.example.com
+Rules:
+  Host                     Path  Backends
+  ----                     ----  --------
+  green.nginx.example.com
+                           /   nginx-deploy-green:80 (192.168.114.20:80)
+Annotations:               cert-manager.io/cluster-issuer: letsencrypt-staging
+Events:
+  Type     Reason             Age    From                      Message
+  ----     ------             ----   ----                      -------
+  Normal   CreateCertificate  7m59s  cert-manager              Successfully created Certificate "letsencrypt-staging"
+  Normal   AddedOrUpdated     7m59s  nginx-ingress-controller  Configuration for default/ingress-resource was added or updated
+  Normal   AddedOrUpdated     7m58s  nginx-ingress-controller  Configuration for default/ingress-resource was added or updated
+  Warning  UpdatedWithError   7m58s  nginx-ingress-controller  Configuration was updated due to updated secret default/letsencrypt-staging, but not applied: Error when reloading NGINX when updating Secret: nginx reload failed: Command /usr/sbin/nginx -s reload stdout: ""
+stderr: "nginx: [emerg] cannot load certificate \"/etc/nginx/secrets/default-letsencrypt-staging\": PEM_read_bio_X509_AUX() failed (SSL: error:0909006C:PEM routines:get_name:no start line:Expecting: TRUSTED CERTIFICATE)\n"
+finished with error: exit status 1
+  Warning  UpdatedWithError  7m58s  nginx-ingress-controller  Configuration was updated due to updated secret default/letsencrypt-staging, but not applied: Error when reloading NGINX when updating Secret: nginx reload failed: Command /usr/sbin/nginx -s reload stdout: ""
+stderr: "nginx: [emerg] cannot load certificate \"/etc/nginx/secrets/default-letsencrypt-staging\": PEM_read_bio_X509_AUX() failed (SSL: error:0909006C:PEM routines:get_name:no start line:Expecting: TRUSTED CERTIFICATE)\n"
+finished with error: exit status 1
+
+
+
+vagrant@k-master:~$ kubectl get secrets
+NAME                  TYPE                                  DATA   AGE
+default-token-pz567   kubernetes.io/service-account-token   3      5d23h
+letsencrypt-staging   kubernetes.io/tls                     3      4m35s
+
+
+letsencrypt-staging   kubernetes.io/tls                     3      10m
+vagrant@k-master:~$ kubectl describe  secrets letsencrypt-staging
+Name:         letsencrypt-staging
+Namespace:    default
+Labels:       <none>
+Annotations:  cert-manager.io/certificate-name: letsencrypt-staging
+              cert-manager.io/issuer-kind: ClusterIssuer
+              cert-manager.io/issuer-name: letsencrypt-staging
+
+Type:  kubernetes.io/tls
+
+Data
+====
+tls.key:  1679 bytes
+ca.crt:   0 bytes
+tls.crt:  0 bytes
+
+
+vagrant@k-master:~$ kubectl get cert -o wide
+NAME                  READY   SECRET                ISSUER                STATUS                                                                        AGE
+letsencrypt-staging   False   letsencrypt-staging   letsencrypt-staging   Waiting for CertificateRequest "letsencrypt-staging-3900472416" to complete   5m33s
+
+vagrant@k-master:~$ kubectl describe cert letsencrypt-staging
+Name:         letsencrypt-staging
+Namespace:    default
+Labels:       <none>
+Annotations:  <none>
+API Version:  cert-manager.io/v1alpha3
+Kind:         Certificate
+Metadata:
+  Creation Timestamp:  2020-07-11T07:23:08Z
+  Generation:          1
+  Managed Fields:
+    API Version:  cert-manager.io/v1alpha2
+    Fields Type:  FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:ownerReferences:
+          .:
+          k:{"uid":"5dbd954f-0cf8-43fc-850f-2c7da8e33141"}:
+            .:
+            f:apiVersion:
+            f:blockOwnerDeletion:
+            f:controller:
+            f:kind:
+            f:name:
+            f:uid:
+      f:spec:
+        .:
+        f:dnsNames:
+        f:issuerRef:
+          .:
+          f:group:
+          f:kind:
+          f:name:
+        f:secretName:
+      f:status:
+        .:
+        f:conditions:
+    Manager:    controller
+    Operation:  Update
+    Time:       2020-07-11T07:23:09Z
+  Owner References:
+    API Version:           extensions/v1beta1
+    Block Owner Deletion:  true
+    Controller:            true
+    Kind:                  Ingress
+    Name:                  ingress-resource
+    UID:                   5dbd954f-0cf8-43fc-850f-2c7da8e33141
+  Resource Version:        272713
+  Self Link:               /apis/cert-manager.io/v1alpha3/namespaces/default/certificates/letsencrypt-staging
+  UID:                     be46ef36-fd9b-4861-88d8-35a572ddc791
+Spec:
+  Dns Names:
+    green.nginx.example.com
+  Issuer Ref:
+    Group:      cert-manager.io
+    Kind:       ClusterIssuer
+    Name:       letsencrypt-staging
+  Secret Name:  letsencrypt-staging
+Status:
+  Conditions:
+    Last Transition Time:  2020-07-11T07:23:09Z
+    Message:               Waiting for CertificateRequest "letsencrypt-staging-3900472416" to complete
+    Reason:                InProgress
+    Status:                False
+    Type:                  Ready
+Events:
+  Type    Reason        Age   From          Message
+  ----    ------        ----  ----          -------
+  Normal  GeneratedKey  12m   cert-manager  Generated a new private key
+  Normal  Requested     12m   cert-manager  Created new CertificateRequest resource "letsencrypt-staging-3900472416"
+
+
+vagrant@k-master:~$ kubectl get events
+LAST SEEN   TYPE      REASON                    OBJECT                              MESSAGE
+15m         Warning   AddedOrUpdatedWithError   ingress/cm-acme-http-solver-2td57   Configuration for default/cm-acme-http-solver-2td57 was added or updated, but not applied: Error reloading NGINX for default/cm-acme-http-solver-2td57: nginx reload failed: Command /usr/sbin/nginx -s reload stdout: ""
+stderr: "nginx: [emerg] cannot load certificate \"/etc/nginx/secrets/default-letsencrypt-staging\": PEM_read_bio_X509_AUX() failed (SSL: error:0909006C:PEM routines:get_name:no start line:Expecting: TRUSTED CERTIFICATE)\n"
+finished with error: exit status 1
+15m         Warning   AddedOrUpdatedWithError   ingress/cm-acme-http-solver-2td57   Configuration for default/cm-acme-http-solver-2td57 was added or updated, but not applied: Error reloading NGINX for default/cm-acme-http-solver-2td57: nginx reload failed: Command /usr/sbin/nginx -s reload stdout: ""
+stderr: "nginx: [emerg] cannot load certificate \"/etc/nginx/secrets/default-letsencrypt-staging\": PEM_read_bio_X509_AUX() failed (SSL: error:0909006C:PEM routines:get_name:no start line:Expecting: TRUSTED CERTIFICATE)\n"
+finished with error: exit status 1
+15m         Normal    Scheduled                 pod/cm-acme-http-solver-6x7mx       Successfully assigned default/cm-acme-http-solver-6x7mx to k-worker02
+15m         Normal    Pulling                   pod/cm-acme-http-solver-6x7mx       Pulling image "quay.io/jetstack/cert-manager-acmesolver:v0.15.2"
+15m         Normal    Pulled                    pod/cm-acme-http-solver-6x7mx       Successfully pulled image "quay.io/jetstack/cert-manager-acmesolver:v0.15.2"
+15m         Normal    Created                   pod/cm-acme-http-solver-6x7mx       Created container acmesolver
+15m         Normal    Started                   pod/cm-acme-http-solver-6x7mx       Started container acmesolver
+15m         Warning   AddedOrUpdatedWithError   ingress/cm-acme-http-solver-bmvbr   Configuration for default/cm-acme-http-solver-bmvbr was added or updated, but not applied: Error reloading NGINX for default/cm-acme-http-solver-bmvbr: nginx reload failed: Command /usr/sbin/nginx -s reload stdout: ""
+stderr: "nginx: [emerg] cannot load certificate \"/etc/nginx/secrets/default-letsencrypt-staging\": PEM_read_bio_X509_AUX() failed (SSL: error:0909006C:PEM routines:get_name:no start line:Expecting: TRUSTED CERTIFICATE)\n"
+finished with error: exit status 1
+15m         Warning   AddedOrUpdatedWithError   ingress/cm-acme-http-solver-bmvbr   Configuration for default/cm-acme-http-solver-bmvbr was added or updated, but not applied: Error reloading NGINX for default/cm-acme-http-solver-bmvbr: nginx reload failed: Command /usr/sbin/nginx -s reload stdout: ""
+stderr: "nginx: [emerg] cannot load certificate \"/etc/nginx/secrets/default-letsencrypt-staging\": PEM_read_bio_X509_AUX() failed (SSL: error:0909006C:PEM routines:get_name:no start line:Expecting: TRUSTED CERTIFICATE)\n"
+finished with error: exit status 1
+15m         Warning   AddedOrUpdatedWithError   ingress/cm-acme-http-solver-sxpbl   Configuration for default/cm-acme-http-solver-sxpbl was added or updated, but not applied: Error reloading NGINX for default/cm-acme-http-solver-sxpbl: nginx reload failed: Command /usr/sbin/nginx -s reload stdout: ""
+stderr: "nginx: [emerg] cannot load certificate \"/etc/nginx/secrets/default-letsencrypt-staging\": PEM_read_bio_X509_AUX() failed (SSL: error:0909006C:PEM routines:get_name:no start line:Expecting: TRUSTED CERTIFICATE)\n"
+finished with error: exit status 1
+15m         Warning   AddedOrUpdatedWithError   ingress/cm-acme-http-solver-sxpbl   Configuration for default/cm-acme-http-solver-sxpbl was added or updated, but not applied: Error reloading NGINX for default/cm-acme-http-solver-sxpbl: nginx reload failed: Command /usr/sbin/nginx -s reload stdout: ""
+stderr: "nginx: [emerg] cannot load certificate \"/etc/nginx/secrets/default-letsencrypt-staging\": PEM_read_bio_X509_AUX() failed (SSL: error:0909006C:PEM routines:get_name:no start line:Expecting: TRUSTED CERTIFICATE)\n"
+finished with error: exit status 1
+16m         Normal    CreateCertificate         ingress/ingress-resource            Successfully created Certificate "letsencrypt-staging"
+16m         Normal    AddedOrUpdated            ingress/ingress-resource            Configuration for default/ingress-resource was added or updated
+15m         Normal    AddedOrUpdated            ingress/ingress-resource            Configuration for default/ingress-resource was added or updated
+15m         Warning   UpdatedWithError          ingress/ingress-resource            Configuration was updated due to updated secret default/letsencrypt-staging, but not applied: Error when reloading NGINX when updating Secret: nginx reload failed: Command /usr/sbin/nginx -s reload stdout: ""
+stderr: "nginx: [emerg] cannot load certificate \"/etc/nginx/secrets/default-letsencrypt-staging\": PEM_read_bio_X509_AUX() failed (SSL: error:0909006C:PEM routines:get_name:no start line:Expecting: TRUSTED CERTIFICATE)\n"
+finished with error: exit status 1
+15m         Warning   UpdatedWithError          ingress/ingress-resource            Configuration was updated due to updated secret default/letsencrypt-staging, but not applied: Error when reloading NGINX when updating Secret: nginx reload failed: Command /usr/sbin/nginx -s reload stdout: ""
+stderr: "nginx: [emerg] cannot load certificate \"/etc/nginx/secrets/default-letsencrypt-staging\": PEM_read_bio_X509_AUX() failed (SSL: error:0909006C:PEM routines:get_name:no start line:Expecting: TRUSTED CERTIFICATE)\n"
+finished with error: exit status 1
+15m         Normal    Started                   challenge/letsencrypt-staging-3900472416-3342406101-555233647   Challenge scheduled for processing
+15m         Normal    Presented                 challenge/letsencrypt-staging-3900472416-3342406101-555233647   Presented challenge using http-01 challenge mechanism
+15m         Normal    Created                   order/letsencrypt-staging-3900472416-3342406101                 Created Challenge resource "letsencrypt-staging-3900472416-3342406101-555233647" for domain "green.nginx.example.com"
+15m         Normal    OrderCreated              certificaterequest/letsencrypt-staging-3900472416               Created Order resource default/letsencrypt-staging-3900472416-3342406101
+15m         Normal    GeneratedKey              certificate/letsencrypt-staging                                 Generated a new private key
+15m         Warning   UpdatedWithError          secret/letsencrypt-staging                                      default/letsencrypt-staging was updated, but not applied: Error when reloading NGINX when updating Secret: nginx reload failed: Command /usr/sbin/nginx -s reload stdout: ""
+stderr: "nginx: [emerg] cannot load certificate \"/etc/nginx/secrets/default-letsencrypt-staging\": PEM_read_bio_X509_AUX() failed (SSL: error:0909006C:PEM routines:get_name:no start line:Expecting: TRUSTED CERTIFICATE)\n"
+finished with error: exit status 1
+15m         Warning   UpdatedWithError          secret/letsencrypt-staging                                      default/letsencrypt-staging was updated, but not applied: Error when reloading NGINX when updating Secret: nginx reload failed: Command /usr/sbin/nginx -s reload stdout: ""
+stderr: "nginx: [emerg] cannot load certificate \"/etc/nginx/secrets/default-letsencrypt-staging\": PEM_read_bio_X509_AUX() failed (SSL: error:0909006C:PEM routines:get_name:no start line:Expecting: TRUSTED CERTIFICATE)\n"
+finished with error: exit status 1
+15m         Normal    Requested                 certificate/letsencrypt-staging                                 Created new CertificateRequest resource "letsencrypt-staging-3900472416"
+
+vagrant@k-master:~$ kubectl get ing -n default
+NAME                        CLASS    HOSTS                     ADDRESS   PORTS     AGE
+cm-acme-http-solver-2td57   <none>   green.nginx.example.com             80        32m
+ingress-resource            <none>   green.nginx.example.com             80, 443   32m
+
+
+vagrant@k-master:~$ kubectl get ClusterIssuer -n default
+NAME                  READY   AGE
+letsencrypt-staging   True    44m
+
+
+vagrant@k-master:~$ kubectl get pod
+NAME                                  READY   STATUS    RESTARTS   AGE
+cm-acme-http-solver-6x7mx             1/1     Running   0          33m
+nginx-deploy-blue-6bbcfd9788-cxf92    1/1     Running   2          3d10h
+nginx-deploy-green-6b85fd4b89-tmqbl   1/1     Running   2          3d10h
+nginx-deploy-main-545f4f6967-c6v2f    1/1     Running   2          3d10h
+nginx-f89759699-fwwsz                 1/1     Running   0          132m
+vagrant@k-master:~$ kubectl logs cm-acme-http-solver-6x7mx
+I0711 07:23:17.983862       1 solver.go:39] cert-manager/acmesolver "msg"="starting listener"  "expected_domain"="green.nginx.example.com" "expected_key"="u7dox8lzvP4CnX1lRGzj_Z1T7_SX9nJ5PW23F2hzPrc.SIkegj7Nm9gfFFAmU473Ka5TGFVTJen_ZPornt90Xmw" "expected_token"="u7dox8lzvP4CnX1lRGzj_Z1T7_SX9nJ5PW23F2hzPrc" "listen_port"=8089
+
+
+vagrant@k-master:~$ kubectl get pod -n cert-manager
+NAME                                       READY   STATUS    RESTARTS   AGE
+cert-manager-58c8d4ff5b-6fqx8              1/1     Running   0          56m
+cert-manager-cainjector-74659dbddf-6xppw   1/1     Running   0          56m
+cert-manager-webhook-56648bc48-fbckd       1/1     Running   0          56m
+
+
+vagrant@k-master:~$ kubectl get challenge
+NAME                                                   STATE     DOMAIN                    AGE
+letsencrypt-staging-3900472416-3342406101-2421529236   pending   green.nginx.example.com   34m
+
+
+vagrant@k-master:~$ kubectl describe  challenge letsencrypt-staging-3900472416-3342406101-2421529236
+Name:         letsencrypt-staging-3900472416-3342406101-2421529236
+Namespace:    default
+Labels:       <none>
+Annotations:  <none>
+API Version:  acme.cert-manager.io/v1alpha3
+Kind:         Challenge
+Metadata:
+  Creation Timestamp:  2020-07-11T08:44:27Z
+  Finalizers:
+    finalizer.acme.cert-manager.io
+  Generation:  1
+  Managed Fields:
+    API Version:  acme.cert-manager.io/v1alpha2
+    Fields Type:  FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:finalizers:
+          .:
+          v:"finalizer.acme.cert-manager.io":
+        f:ownerReferences:
+          .:
+          k:{"uid":"d3a64c6d-cfa5-43c2-9e69-831561d10354"}:
+            .:
+            f:apiVersion:
+            f:blockOwnerDeletion:
+            f:controller:
+            f:kind:
+            f:name:
+            f:uid:
+      f:spec:
+        .:
+        f:authzURL:
+        f:dnsName:
+        f:issuerRef:
+          .:
+          f:group:
+          f:kind:
+          f:name:
+        f:key:
+        f:solver:
+          .:
+          f:http01:
+            .:
+            f:ingress:
+              .:
+              f:class:
+        f:token:
+        f:type:
+        f:url:
+        f:wildcard:
+      f:status:
+        .:
+        f:presented:
+        f:processing:
+        f:reason:
+        f:state:
+    Manager:    controller
+    Operation:  Update
+    Time:       2020-07-11T08:44:28Z
+  Owner References:
+    API Version:           acme.cert-manager.io/v1alpha2
+    Block Owner Deletion:  true
+    Controller:            true
+    Kind:                  Order
+    Name:                  letsencrypt-staging-3900472416-3342406101
+    UID:                   d3a64c6d-cfa5-43c2-9e69-831561d10354
+  Resource Version:        290140
+  Self Link:               /apis/acme.cert-manager.io/v1alpha3/namespaces/default/challenges/letsencrypt-staging-3900472416-3342406101-2421529236
+  UID:                     842702cd-d2fa-48ec-9924-477a65b29399
+Spec:
+  Authz URL:  https://acme-staging-v02.api.letsencrypt.org/acme/authz-v3/75672858
+  Dns Name:   green.nginx.example.com
+  Issuer Ref:
+    Group:  cert-manager.io
+    Kind:   ClusterIssuer
+    Name:   letsencrypt-staging
+  Key:      BYiWtd_JH3WSAlILcYPfkFCk-fQtTxjvitR-tOYX7Sw.Xt9axdtWPoBF2wu9M7TRWh3fzX8WH90KHyVZiuGfCyk
+  Solver:
+    http01:
+      Ingress:
+        Class:  nginx
+  Token:        BYiWtd_JH3WSAlILcYPfkFCk-fQtTxjvitR-tOYX7Sw
+  Type:         http-01
+  URL:          https://acme-staging-v02.api.letsencrypt.org/acme/chall-v3/75672858/eqmD-Q
+  Wildcard:     false
+Status:
+  Presented:   true
+  Processing:  true
+  Reason:      Waiting for http-01 challenge propagation: failed to perform self check GET request 'http://green.nginx.example.com/.well-known/acme-challenge/BYiWtd_JH3WSAlILcYPfkFCk-fQtTxjvitR-tOYX7Sw': Get "http://green.nginx.example.com/.well-known/acme-challenge/BYiWtd_JH3WSAlILcYPfkFCk-fQtTxjvitR-tOYX7Sw": dial tcp: lookup green.nginx.example.com on 10.96.0.10:53: no such host
+  State:       pending
+Events:
+  Type    Reason     Age   From          Message
+  ----    ------     ----  ----          -------
+  Normal  Started    50m   cert-manager  Challenge scheduled for processing
+  Normal  Presented  50m   cert-manager  Presented challenge using http-01 challenge mechanism
+

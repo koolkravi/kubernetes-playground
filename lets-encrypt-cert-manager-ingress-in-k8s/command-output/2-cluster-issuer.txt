@@ -1,0 +1,31 @@
+Before
+vagrant@k-master:~$ kubectl get secrets
+NAME                  TYPE                                  DATA   AGE
+default-token-pz567   kubernetes.io/service-account-token   3      5d22h
+
+vagrant@k-master:~$ kubectl get cert
+No resources found in default namespace.
+
+
+
+After
+
+vagrant@k-master:~$ kubectl create -f /vagrant/ClusterIssuer.yaml
+clusterissuer.cert-manager.io/letsencrypt-staging created
+
+
+vagrant@k-master:~$ kubectl get clusterissuer.cert-manager.io
+NAME                  READY   AGE
+letsencrypt-staging   True    29s
+
+vagrant@k-master:~$ kubectl get clusterissuer -o wide
+NAME                  READY   STATUS                                                 AGE
+letsencrypt-staging   True    The ACME account was registered with the ACME server   100s
+
+
+vagrant@k-master:~$ kubectl get secrets
+NAME                  TYPE                                  DATA   AGE
+default-token-pz567   kubernetes.io/service-account-token   3      5d22h
+vagrant@k-master:~$ kubectl get cert
+No resources found in default namespace.
+

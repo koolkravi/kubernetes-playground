@@ -1,0 +1,220 @@
+# A. Demo without TLS
+
+## 1.
+```
+sudo vi /etc/haproxy/haproxy.cfg
+#add demo/haproxy.cfg
+```
+
+## 2. 
+```
+sudo systemctl restart haproxy
+sudo systemctl status haproxy
+netstat -nltp 
+```
+
+## 3. 
+```
+./install-nginx-Ingress-controller.sh
+# helm status nginx-ingress
+```
+## 4.
+```
+kubectl apply -f  demo/nginx-deploy-main.yaml
+kubectl apply -f  demo/nginx-deploy-blue.yaml
+kubectl apply -f  demo/nginx-deploy-green.yaml
+kubectl expose deploy nginx-deploy-main --port 80
+kubectl expose deploy nginx-deploy-blue --port 80
+kubectl expose deploy nginx-deploy-green --port 80
+
+kubectl create -f nginx-deployment.yaml
+kubectl expose deploy nginx --port 80
+```
+
+## 5
+```
+kubectl apply -f demo/ingress-resource-2.yaml
+```
+## 6
+```
+sudo vi /etc/hosts
+```
+
+## Test:
+```
+nginx.example.com
+blue.nginx.example.com
+green.nginx.example.com
+
+```
+## Clean: 
+## 1.
+```
+kubectl delete ing ingress-resource-2
+```
+## 2
+```
+kubectl delete service nginx-deploy-green
+kubectl delete service nginx-deploy-blue
+kubectl delete service nginx-deploy-main
+kubectl delete deploy nginx-deploy-green
+kubectl delete deploy nginx-deploy-blue
+kubectl delete deploy nginx-deploy-main
+kubectl delete service nginx
+kubectl delete deploy nginx
+```
+
+## 3.
+```
+kubectl delete DaemonSet nginx-ingress -n nginx-ingress
+kubectl delete ConfigMap nginx-config -n nginx-ingress
+kubectl delete Secret default-server-secret -n nginx-ingress
+kubectl delete ClusterRoleBinding nginx-ingress
+kubectl delete ClusterRole nginx-ingress
+kubectl delete serviceaccount nginx-ingress
+kubectl delete namespace nginx-ingress
+```
+
+# B. TLS Demo : using lets encrypt   - Issue in creaeting certificates
+
+There are some issue comming in challenge resource
+check file command-output/ 3-ingres-resource.txt for command outputs 
+```
+Reason:      Waiting for http-01 challenge propagation: failed to perform self check GET request 
+'http://green.nginx.example.com/.well-known/acme-challenge/BYiWtd_JH3WSAlILcYPfkFCk-fQtTxjvitR-tOYX7Sw': 
+Get "http://green.nginx.example.com/.well-known/acme-challenge/BYiWtd_JH3WSAlILcYPfkFCk-fQtTxjvitR-tOYX7Sw": 
+dial tcp: lookup green.nginx.example.com on 10.96.0.10:53: no such host
+```
+
+## 1.
+```
+sudo vi /etc/haproxy/haproxy.cfg
+#add haproxy.cfg
+```
+## 2. same
+## 3. same
+## 4. same
+
+### 4.1.
+```
+./4-install-cert-manager.sh
+#helm status cert-manager
+# kubectl <cert manager pod> logs -n cert-manager
+```
+
+### 4.2.
+```
+kubectl create -f 5-ClusterIssuer.yaml
+#kubectl describe ClusterIssuer letsencrypt-staging
+```
+
+## 5
+```
+kubectl create -f 6-ingress-resource.yaml
+#kubectl describe ing ingress-resource
+#kubectl get secrets
+#kubectl get certificates
+#kubectl get events
+#kubectl get events -n cert-manager
+#kubectl <cert manager pod> logs -n cert-manager
+#kubectl get challenge
+```
+
+## 6 same
+
+## test: 
+```
+https://green.nginx.example.com
+```
+
+## Clean: 
+## 1
+```
+kubectl delete ing ingress-resource
+kubectl delete secrets letsencrypt-staging
+```
+
+### 1.1 clusterIssuer
+```
+kubectl delete clusterIssuer letsencrypt-staging
+```
+
+### 1.2 cert-manager
+```
+helm delete cert-manager --purge
+kubectl delete ns cert-manager
+```
+
+### 1.3 crds
+```
+kubectl delete crds  certificaterequests.cert-manager.io 
+kubectl delete crds  certificates.cert-manager.io 
+kubectl delete crds  challenges.acme.cert-manager.io 
+kubectl delete crds  clusterissuers.cert-manager.io 
+kubectl delete crds  issuers.cert-manager.io 
+kubectl delete crds  orders.acme.cert-manager.io 
+```
+
+## 2 same
+## 3 same
+
+
+# C. TLS Demo : using self created certificate
+
+## 1 Create the key and certificate
+```
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /vagrant/cert/green.nginx.example.key -out /vagrant/cert/green.nginx.example.crt -subj "/CN=green.nginx.example.com/O=green.nginx.example.com"
+
+#openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ${KEY_FILE} -out ${CERT_FILE} -subj "/CN=${HOST}/O=${HOST}"
+```
+
+## 2 create secret resource
+
+### option 1: using command 
+```
+kubectl create secret tls mysecret --key /vagrant/cert/green.nginx.example.key --cert /vagrant/cert/green.nginx.example.crt
+#kubectl create secret tls ${CERT_NAME} --key ${KEY_FILE} --cert ${CERT_FILE}
+#kubectl get secret
+#kubectl sescribe secret mysecret
+```
+
+### option 2: using ingress file
+Now that I have the key and crt file, I’m ready to create a kubernetes Secret using these files. 
+Kubernetes stores these files as a base64 string, so the first step is to encode them.
+
+- encode 
+```
+cat /vagrant/cert/green.nginx.example.key | base64
+cat /vagrant/cert/green.nginx.example.crt | base64
+```
+- create secrete file
+
+	```
+	apiVersion: v1
+	kind: Secret
+	metadata:
+	  name: onboard.192.168.99.6.nip.io.tls
+	  namespace: default
+	type: kubernetes.io/tls
+	data:
+	  tls.crt:LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURhVENDQWxHZ0F3SUJBZ0lVWkhmQkFUU2FGQ1NWZDg3b0UrTk5UY3M0MllRd0RRWUpLb1pJaHZjTkFRRUwKQlFBd1JERWdNQjRHQTFVRUF3d1haM0psWlc0dWJtZHBibmd1WlhoaGJYQnNaUzVqYjIweElEQWVCZ05WQkFvTQpGMmR5WldWdUxtNW5hVzU0TG1WNFlXMXdiR1V1WTI5dE1CNFhEVEl3TURjeE1URXdNVGswTVZvWERUSXhNRGN4Ck1URXdNVGswTVZvd1JERWdNQjRHQTFVRUF3d1haM0psWlc0dWJtZHBibmd1WlhoaGJYQnNaUzVqYjIweElEQWUKQmdOVkJBb01GMmR5WldWdUxtNW5hVzU0TG1WNFlXMXdiR1V1WTI5dE1JSUJJakFOQmdrcWhraUc5dzBCQVFFRgpBQU9DQVE4QU1JSUJDZ0tDQVFFQTVEc3J6cDJSRlFnaStVcHdWU0pUUU1aRldaZ1g5S0VjR1NvY2FRVHpFNTNmCkErWjlmTlkxQldNWm5ISk9tZ0ZZRDNHaTJVNXFNdzY3bUxrYUg0QlV0T1hUTzZWMkEzRUFFcGlqM1kzb0JRMkkKQUV4VVhtN2pmT090eGptNEd2V0xvZjlpRU45WnZaQWYrUStaRkZQQVkxcklzZ1BpZ1B1L0xDZWdROGJveDRvTQpFS2xudlBjbmdJNC96Yk5rUTNIcHlpTXZKb2ZJZjlHU1NtdWdRODNvbGdtYWRKTDlVK0hjcWllUitERGVzT2Q1CjFQZ05BYUVEdlk3UE1jcm5RT1VoMVVzTEpaQkt3eVYvbW5lODBXdHRkOHd3azlqWjJET1NoK09pWW1sZTdIQkYKM1hvd2VIdzJxWjAzT2xoaG5ORjU5VjY2d1dyZ0F1RUFIV1Z1SnlaalNRSURBUUFCbzFNd1VUQWRCZ05WSFE0RQpGZ1FVOVRlTEp4UUYvRnpJb3V0OHVoMm01blVjSFo0d0h3WURWUjBqQkJnd0ZvQVU5VGVMSnhRRi9GeklvdXQ4CnVoMm01blVjSFo0d0R3WURWUjBUQVFIL0JBVXdBd0VCL3pBTkJna3Foa2lHOXcwQkFRc0ZBQU9DQVFFQVZwdFUKNU8yTmZtOVdNVldsbkdWb092ZkRVdU1hVS93bTB5aXQySnZISE9kSVh2THpiTk92L3RldldBYjROQkJxZE9uTwpRalhFS2U5eHJSY2NNK21jTVBUdXFDSm9QUFl1MWsyd1N0ZzYwWExWU1p3NERFdXRZSW1Ic3cyT0FrakE1UkltCjNIeHRBWk5pbnRFK2JEUkNTbDNiNHpqbmJOOFV5cjl5M2FwaTB0S0R1Wm1WQnBWTGhtZW9sYktVZUJhT0ovbnEKOWlEQ1ltZDlqVUFzSTNBSTE4Vjg4NUVrN3FkTnBSWGtRSGlFZldiQm8xZVYvTzRSK01qQjdtUmdLc0ZsOWhKWAp6L0lJT3hDWko0bzRpRWhkTVlhNzFlNndwMzVSNkdMYXBYV2lpZXJCdEtnNTVHWkNzZlI1ekFnTlpvRXhwaHZ5CkpWMTlUUmhYZnp3cHZJNlZpQT09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+	  tls.key:LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tCk1JSUV2UUlCQURBTkJna3Foa2lHOXcwQkFRRUZBQVNDQktjd2dnU2pBZ0VBQW9JQkFRRGtPeXZPblpFVkNDTDUKU25CVklsTkF4a1ZabUJmMG9Sd1pLaHhwQlBNVG5kOEQ1bjE4MWpVRll4bWNjazZhQVZnUGNhTFpUbW96RHJ1WQp1Um9mZ0ZTMDVkTTdwWFlEY1FBU21LUGRqZWdGRFlnQVRGUmVidU44NDYzR09iZ2E5WXVoLzJJUTMxbTlrQi81CkQ1a1VVOEJqV3NpeUErS0ErNzhzSjZCRHh1akhpZ3dRcVdlODl5ZUFqai9OczJSRGNlbktJeThtaDhoLzBaSksKYTZCRHplaVdDWnAwa3YxVDRkeXFKNUg0TU42dzUzblUrQTBCb1FPOWpzOHh5dWRBNVNIVlN3c2xrRXJESlgrYQpkN3pSYTIxM3pEQ1QyTm5ZTTVLSDQ2SmlhVjdzY0VYZGVqQjRmRGFwblRjNldHR2MwWG4xWHJyQmF1QUM0UUFkClpXNG5KbU5KQWdNQkFBRUNnZ0VBUFJVcEVFOVRlUkdJYXJmbGdLT0RMSjdrQ0txUUhzVFB4RnhrNWlhUTkvc1UKcVBLVE8wb0pQcnZiS3VmYzZaTGFncWVqTWcydWxxT215YVVndkxXWDlpSmNlbVk2UTRtR3YzTml4L1VtMTlOYgpSdGttNjI4Nkt6NjBUNDA3SE53QzF3U0d0b1ZRZTArTGZ4a1JtME1mQm5oUnBuTXJ0K0dvdEtTV1hBMXNWNXExClpIRnBtdjhQZjZ6SER5ZWNsTW1sYzVJSVVEU0dWbmRIWmxNMnhWNWg4bzZDM3RZemhya2wwSXVzRWt5NjFUUUkKSHNta2tlT2hSaEJFZUloK2doZjI5ekduNGI4ZWd6VHV6N1lEUEs5cHd0T2djU2ZkV3dkbFlWZFgzak4zbmVwSQpTYXdZdytFcGtYQmQ2aHF0ZFdTV1kxZ2FHam9xOTRoZmpleWUxS2xnVVFLQmdRRHpTYXA3Z1NTdFVtQkxORmF6CjR6czdoQ3pNMlFnS09zaHFoRjZ0QjVkSy9GM1UzUzZyVXRRL1NON09FWGZBbm5nTFBITFNZR0xPMGl3NytSMUoKelZxRml0OFN5Ty9jdy9zZlUvYzZoSlpGREZvc3kzZkI1eHlzbE9oR2VvVlduVkh0MFFPK1NzcXc2SjdvU3ozTwpId01jRUtneUczZ3p2Z2pFdEVOeGtFOVIzd0tCZ1FEd0tCbS9nZ3RycVhuUGh6bWJIbytlMTg0cFNsV09Ic1hRCnBXQ20remYzNXRnQThlekh2cW9SVExabFBMVFcwYlVla3FnWGZjMkxQWEl2SlJ0RXJMZjArOFlRdHlHdVcxdGkKODViVGFQM3VMbXJKUmhHWnZRK25MZEczUDlKdTdDS2h5TXN0N245TE4rTU56YVNZUnhMSzFVT2VnYzVtcDNXago0UHh2MEhWLzF3S0JnUUNpM00yam4vQk5scmVmb0lucUlsT2tvL2JacXZBVzZRTUJTMXVWdVY4dWM0TGMzTFJCClBGR1ppODZiWkZZbU8rOWdsamJIWG43R3RTdW5lanlCQzFkdHptbEd5ZnpJYk9uUEx3Wnh4aEJTYU5KMDZrQmgKTGJXa1VvcXJvNWxmUWpGMllsVi9MZEpDVzNjRlNsazFnczB5SEhSOEZxZUErOVlpMkFuT0hDejlRUUtCZ0hudwpJb0syaVEzMVUwQW9MUHV5SE1KT1dRTm1GdUsraFRwWGZpZkt6clEwcGVCMDlnREZzcHh1RXY1OFFHWUN2Sy8xClR4dithR3NXbSsrTUs3aEc2bkNkbGdmT3RHOVBPNnVXZXpLRTBNb3JEMVY3R2x5eFBrMW9XbDl0TEcvZHZnZmYKYUNxK09pdjdDSEp0dy9EOXhYRHZzQkcvWHdtSVpaYjhHYkM4YTZ5cEFvR0FDMnNrRU5FMGRyL1BRZ2ZzSVNZaApoZ0hsNVNKZVUxSUFvUW1hcUFLWXppZThOU1dDQVpaWm8vbE9BSXZHVUpaSjg5UHhoZlpaL1hTNzZEckRIa1FzCjZnZjhaRnZoY2RybGR2VnlLSnJpZC93T3FnaDhGY0NteVFaWUVRd3FXWm9OYU5TRVJsbWY5NzNhTXcyVHFGai8KcnE1K21FQVVyaitXc1BCS3VzMHloYjA9Ci0tLS0tRU5EIFBSSVZBVEUgS0VZLS0tLS0K
+	```
+
+## 3 ingress with secret name
+```
+kubectl create -f 6-2-ingress-resource.yaml
+```
+
+- Issue: https://stackoverflow.com/questions/58553510/cant-get-certs-working-with-cert-manager
+- trouble shoot: https://kubernetes.github.io/ingress-nginx/troubleshooting/
+- Logs
+	```
+	kubectl logs quickstart-nginx-ingress-76cd7f9b4c-8s79b
+	kubectl get certificates -o wide
+	```
+- Create cerificate and secret
+- https://kubernetes.github.io/ingress-nginx/user-guide/tls/
+- https://software.danielwatrous.com/generate-tls-secret-for-kubernetes/
+- https://gardener.cloud/documentation/guides/applications/https/
+

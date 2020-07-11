@@ -1,0 +1,17 @@
+/.vagrant
+/scripts
+/docs
+/token
+/ingress-demo
+/demo
+/bootstrap_k-master.sh
+/bootstrap_k-worker01.sh
+/bootstrap.sh
+/ClusterIssuer - Copy (2).yaml
+/ClusterIssuer - Copy.yaml
+/ingress-resource - Copy (2).yaml
+/ingress-resource - Copy (3).yaml
+/ingress-resource - Copy.yaml
+/install-cert-manager - Copy.sh
+/install-nginx-Ingress-controller_2.sh
+/cert

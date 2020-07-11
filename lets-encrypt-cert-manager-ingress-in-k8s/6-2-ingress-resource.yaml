@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-resource
+spec:
+  tls:
+  - hosts:
+    - green.nginx.example.com
+    secretName: mysecret
+  rules:
+  - host: green.nginx.example.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: nginx-deploy-green
+          servicePort: 80

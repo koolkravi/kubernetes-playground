@@ -1,0 +1,21 @@
+vagrant@k-master:~$ kubectl get pods -n cert-manager
+NAME                                       READY   STATUS    RESTARTS   AGE
+cert-manager-58c8d4ff5b-6fqx8              1/1     Running   0          66m
+cert-manager-cainjector-74659dbddf-6xppw   1/1     Running   0          66m
+cert-manager-webhook-56648bc48-fbckd       1/1     Running   0          66m
+
+
+
+vagrant@k-master:~$ kubectl logs cert-manager-webhook-56648bc48-fbckd -n cert-manager
+W0711 07:03:57.965788       1 client_config.go:543] Neither --kubeconfig nor --master was specified.  Using the inClusterConfig.  This might not work.
+I0711 07:03:57.967179       1 webhook.go:63]  "msg"="using dynamic certificate generating using CA stored in Secret resource"  "secret_name"="cert-manager-webhook-ca" "secret_namespace"="cert-manager"
+I0711 07:03:57.967552       1 server.go:139]  "msg"="listening for insecure healthz connections"  "address"=":6080"
+I0711 07:03:57.967668       1 server.go:152]  "msg"="listening for secure connections"  "address"=":10250"
+I0711 07:03:57.967753       1 server.go:178]  "msg"="registered pprof handlers"
+I0711 07:03:58.018209       1 reflector.go:175] Starting reflector *v1.Secret (1m0s) from external/io_k8s_client_go/tools/cache/reflector.go:125
+I0711 07:03:58.163982       1 authority.go:313]  "msg"="Generating new root CA"
+I0711 07:03:58.421905       1 authority.go:248]  "msg"="Detected change in CA secret data, notifying watchers..."
+I0711 07:03:58.999627       1 dynamic_source.go:171]  "msg"="Generating new ECDSA private key"
+I0711 07:03:59.013579       1 dynamic_source.go:186]  "msg"="Signing new serving certificate"
+I0711 07:03:59.044150       1 dynamic_source.go:192]  "msg"="Signed new serving certificate"
+I0711 07:03:59.057054       1 dynamic_source.go:198]  "msg"="Updated serving TLS certificate"
