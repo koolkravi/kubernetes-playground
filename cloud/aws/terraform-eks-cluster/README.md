@@ -107,6 +107,17 @@ kubectl get svc
 LB URL : a030fb40938c64966885514f541ae8ef-473748140.us-east-1.elb.amazonaws.com
 
 terraform destroy
+
+```
+
+## other commnds
+```
+kubectl delete deploy terraform-example
+kubectl delete svc terraform-example
+
+#note: you can also run seperatly deployment and service with below commands
+terraform apply -target=kubernetes_deployment.example
+terraform apply -target=kubernetes_service.example
 ```
 
 ## Reference : 
@@ -122,7 +133,7 @@ Note: Run below on Window machine from powershell
 
 1. Run Amazon CLI 
 #docker run -it --rm -v ${PWD}:/work -w /work --entrypoint /bin/sh amazon/aws-cli:2.0.43
-docker run --rm -ti -v /C/Users/ravi_kumar27/.aws:/root/.aws -v /d/my_data4/5.study_material/kubernetes-playground/cloud/aws/terraform:/aws --entrypoint /bin/sh amazon/aws-cli
+docker run --rm -ti -v /C/Users/ravikumar/.aws:/root/.aws -v /d/my_data4/5.study_material/kubernetes-playground/cloud/aws/terraform:/aws --entrypoint /bin/sh amazon/aws-cli
 
 
 2. some handy tools
