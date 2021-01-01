@@ -193,7 +193,7 @@ kubectl apply -f micro-ingress.yaml
 kubectl delete namespace nginx-ingress
 kubectl delete clusterrole nginx-ingress
 kubectl delete clusterrolebinding nginx-ingress
-``
+```
 
 ## Reference
 - [nginxinc/kubernetes-ingress](https://github.com/nginxinc/kubernetes-ingress#getting-started) 
