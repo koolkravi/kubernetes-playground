@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: micro-ingress
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+    - host: hostname.mydomain.com
+      http:
+        paths:
+          - backend:
+              serviceName: hostname-svc
+              servicePort: 80
+    - host: apache.mydomain.com
+      http:
+        paths:
+          - backend:
+              serviceName: apache-svc
+              servicePort: 80
