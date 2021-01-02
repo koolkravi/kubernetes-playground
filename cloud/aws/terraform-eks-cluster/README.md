@@ -107,7 +107,7 @@ kubectl get svc
 LB URL : a030fb40938c64966885514f541ae8ef-473748140.us-east-1.elb.amazonaws.com
 
 terraform destroy
-
+terraform state rm module.eks.kubernetes_config_map.aws_auth
 ```
 
 ## other commnds
