@@ -181,6 +181,7 @@ open LB URL from browser and access ngnix : a030fb40938c64966885514f541ae8ef-473
 
 9. Clean up
 terraform destroy
+terraform state rm module.eks.kubernetes_config_map.aws_auth
 ```
 
 ## issues
@@ -196,4 +197,11 @@ module "eks" {
   # ...
   wait_for_cluster_interpreter = ["c:/git/bin/sh.exe", "-c"]
 }
+
+Issue 3: Terraform destroy 
+Error: Get "http://localhost/api/v1/namespaces/kube-system/configmaps/aws-auth": dial tcp 127.0.0.1:80: connect: connection refused
+
+Resulution : rune below after destroy. [See Here](https://github.com/terraform-aws-modules/terraform-aws-eks/issues/911)
+terraform state rm module.eks.kubernetes_config_map.aws_auth
+
 ```
