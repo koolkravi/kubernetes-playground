@@ -1,7 +1,7 @@
 # deployment
 
 # kubernetes_deployment
-resource "kubernetes_deployment" "example" {
+/*resource "kubernetes_deployment" "example" {
   metadata {
     name = "terraform-example"
     labels = {
@@ -45,9 +45,9 @@ resource "kubernetes_deployment" "example" {
     }
   }
 }
-
+*/
 # kubernetes_service
-resource "kubernetes_service" "example" {
+/*resource "kubernetes_service" "example" {
   metadata {
     name = "terraform-example"
   }
@@ -62,5 +62,5 @@ resource "kubernetes_service" "example" {
 
     type = "LoadBalancer"
   }
-}
+}*/
 

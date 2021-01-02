@@ -3,3 +3,4 @@
 /.terraform.lock.hcl
 /terraform.tfstate.backup
 /.terraform.tfstate.lock.info
+/kubeconfig_eks-cluster

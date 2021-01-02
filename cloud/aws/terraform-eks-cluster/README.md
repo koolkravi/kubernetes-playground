@@ -89,6 +89,7 @@ open LB URL from browser and access ngnix : a030fb40938c64966885514f541ae8ef-473
 
 ```
 terraform destroy
+terraform state rm module.eks.kubernetes_config_map.aws_auth
 ```
 
 ## Quick commands
