@@ -103,6 +103,8 @@ kubectl get svc --namespace=nginx-ingress
 
 ```
 curl -I http://aaa71bxxxxx-11xxxxx10.us-east-1.elb.amazonaws.com/
+or 
+curl -kivL http://a805b8d3239f9408d81ec427b53d8f55-595912430.us-east-1.elb.amazonaws.com/
 
 return 404
 ```
@@ -114,26 +116,26 @@ Note: The default server returns a "Not Found" page with a 404 status code for a
 
 * This is a request based on the first configured domain
 ```
-curl -I -H "Host: hostname.mydomain.com"
-http://aaa25a5010daa11eaa41e121e71bd6ca-113564610.us-east-1.elb.amazonaws.com/
+curl -I -H "Host: hostname.mydomain.com" http://aaa25a5010daa11eaa41e121e71bd6ca-113564610.us-east-1.elb.amazonaws.com/
+or
+curl -kivLI -H "Host: hostname.mydomain.com" http://a805b8d3239f9408d81ec427b53d8f55-595912430.us-east-1.elb.amazonaws.com/
 
 return 200
 ```
 
 * This is a request based on the second configured domain:
-
 ```
-curl -I -H "Host: apache.mydomain.com"
-http://aaa25a5010daa11eaa41e121e71bd6ca-113564610.us-east-1.elb.amazonaws.com/
+curl -I -H "Host: apache.mydomain.com" http://aaa25a5010daa11eaa41e121e71bd6ca-113564610.us-east-1.elb.amazonaws.com/
+or
+curl -kivL -H "Host: apache.mydomain.com" http://a805b8d3239f9408d81ec427b53d8f55-595912430.us-east-1.elb.amazonaws.com/
 
 return 200
 ```
-
 After you add the Host header, the Ingress Controller can redirect traffic to the backend configured service as it matches the configuration defined in Ingress.
 
 Note: 
-* If you want to keep the same domain name, but divert the traffic based on the path accessed, you must add path-based routing with Ingress. For example:
-
+* If you want to keep the same domain name, but divert the traffic based on the path accessed, you must add path-based routing with Ingress. 
+For example:
 ```
 micro-ingress-path-based.yaml
 kubectl apply -f micro-ingress.yaml
@@ -177,11 +179,11 @@ kubectl describe ing  micro-ingress
 
 Get LB :  kubectl get svc --namespace=nginx-ingress
 
-curl -I http://a18556e2c56f34d9685ec11fb000b603-1631808824.us-east-1.elb.amazonaws.com/
+curl -kivL http://a805b8d3239f9408d81ec427b53d8f55-595912430.us-east-1.elb.amazonaws.com/
 
-curl -I -H "Host: hostname.mydomain.com" http://a18556e2c56f34d9685ec11fb000b603-1631808824.us-east-1.elb.amazonaws.com/
+curl -kivLI -H "Host: hostname.mydomain.com" http://a805b8d3239f9408d81ec427b53d8f55-595912430.us-east-1.elb.amazonaws.com/
 
-curl -I -H "Host: apache.mydomain.com" http://a18556e2c56f34d9685ec11fb000b603-1631808824.us-east-1.elb.amazonaws.com/
+curl -kivL -H "Host: apache.mydomain.com" http://a805b8d3239f9408d81ec427b53d8f55-595912430.us-east-1.elb.amazonaws.com/
 
 micro-ingress-path-based.yaml
 kubectl apply -f micro-ingress.yaml
